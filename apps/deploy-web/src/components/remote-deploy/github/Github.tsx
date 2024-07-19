@@ -13,8 +13,8 @@ const Github = ({
   setDeploymentName,
   deploymentName
 }: {
-  setDeploymentName?: Dispatch<string>;
-  deploymentName?: string;
+  setDeploymentName: Dispatch<string>;
+  deploymentName: string;
   control: Control<SdlBuilderFormValues>;
 
   setValue: any;

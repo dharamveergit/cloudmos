@@ -26,8 +26,8 @@ const GithubDeploy = ({
   setValue: any;
   services: Service[];
   control: any;
-  setDeploymentName?: Dispatch<string>;
-  deploymentName?: string;
+  setDeploymentName: Dispatch<string>;
+  deploymentName: string;
 }) => {
   const [token, setToken] = useAtom(remoteDeployStore.tokens);
 

@@ -15,8 +15,8 @@ const Bit = ({
   setDeploymentName,
   deploymentName
 }: {
-  setDeploymentName?: Dispatch<string>;
-  deploymentName?: string;
+  setDeploymentName: Dispatch<string>;
+  deploymentName: string;
   loading: boolean;
   setValue: any;
   services: Service[];

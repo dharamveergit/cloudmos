@@ -1,11 +1,25 @@
-import { useState } from "react";
+import { Dispatch, useState } from "react";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue, Spinner } from "@akashnetwork/ui/components";
 import { GithubCircle, Lock } from "iconoir-react";
 import { useAtom } from "jotai";
 import { nanoid } from "nanoid";
 
 import remoteDeployStore from "@src/store/remoteDeployStore";
-const Repos = ({ repos, setValue, isLoading, services, setDeploymentName }) => {
+import { Service } from "@src/types";
+const Repos = ({
+  repos,
+  setValue,
+  isLoading,
+  services,
+  setDeploymentName
+}: {
+  repos: any;
+  setValue: any;
+  services: Service[];
+  isLoading: boolean;
+  setDeploymentName: Dispatch<string>;
+  deploymentName: string;
+}) => {
   const [open, setOpen] = useState(false);
   console.log(repos);
   const [token] = useAtom(remoteDeployStore.tokens);

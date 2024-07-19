@@ -15,8 +15,8 @@ const GitLab = ({
   setDeploymentName,
   deploymentName
 }: {
-  setDeploymentName?: Dispatch<string>;
-  deploymentName?: string;
+  setDeploymentName: Dispatch<string>;
+  deploymentName: string;
   loading: boolean;
   setValue: any;
   services: Service[];
@@ -27,7 +27,14 @@ const GitLab = ({
   return (
     <>
       <Groups isLoading={loading} group={group} setGroup={setGroup} />
-      <Repos isLoading={isLoading} repos={repos} setValue={setValue} setDeploymentName={setDeploymentName} deploymentName={deploymentName} />
+      <Repos
+        services={services}
+        isLoading={isLoading}
+        repos={repos}
+        setValue={setValue}
+        setDeploymentName={setDeploymentName}
+        deploymentName={deploymentName}
+      />
       <Branches services={services} control={control} repos={repos} />
     </>
   );

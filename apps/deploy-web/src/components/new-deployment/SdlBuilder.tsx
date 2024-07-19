@@ -19,8 +19,8 @@ interface Props {
   sdlString: string | null;
   setEditedManifest: Dispatch<string>;
   github?: boolean;
-  setDeploymentName?: Dispatch<string>;
-  deploymentName?: string;
+  setDeploymentName: Dispatch<string>;
+  deploymentName: string;
 }
 
 export type SdlBuilderRefType = {
