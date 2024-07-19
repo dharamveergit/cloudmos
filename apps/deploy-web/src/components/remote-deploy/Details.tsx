@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Card, CardContent, Collapsible, CollapsibleContent, CollapsibleTrigger, Separator } from "@akashnetwork/ui/components";
 import { cn } from "@akashnetwork/ui/utils";
 import { NavArrowDown } from "iconoir-react";
-
 import CustomInput from "./CustomInput";
 import { appendEnv } from "./utils";
 
