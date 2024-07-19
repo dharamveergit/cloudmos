@@ -98,6 +98,8 @@ export const useFetchAccessToken = () => {
 
 export const useBranches = (repo?: string, fetch?: boolean) => {
   const [token] = useAtom(remoteDeployStore.tokens);
+  console.log("fetch", fetch);
+
   return useQuery({
     queryKey: ["branches", repo, token?.access_token],
     queryFn: async () => {
