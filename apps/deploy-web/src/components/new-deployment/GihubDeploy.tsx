@@ -1,7 +1,7 @@
+import { Dispatch, useEffect, useState } from "react";
 import { Button, Spinner, Tabs, TabsContent, TabsList, TabsTrigger } from "@akashnetwork/ui/components";
 import { Bitbucket, Github as GitIcon, GitlabFull } from "iconoir-react";
 import { useAtom } from "jotai";
-import { Dispatch, useEffect, useState } from "react";
 
 import remoteDeployStore from "@src/store/remoteDeployStore";
 import { Service } from "@src/types";
@@ -58,8 +58,6 @@ const GithubDeploy = ({
       if (token?.type === "gitlab") fetchAccessTokenGitLab(code);
     }
   }, [open]);
-
-  console.log(token);
 
   return (
     <>
