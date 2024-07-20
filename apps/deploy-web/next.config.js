@@ -51,6 +51,7 @@ const moduleExports = {
     config.externals.push("pino-pretty");
     return config;
   },
+  rewrites: [{ source: "/(.*)", destination: "/" }],
   redirects: async () => {
     return [
       {

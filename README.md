@@ -10,7 +10,7 @@
   
 ![version](https://img.shields.io/github/stars/akash-network/console)
 ![license](https://img.shields.io/github/license/akash-network/console)
-[![X URL](https://img.shields.io/x/url/https/x.com/bukotsunikki.svg?style=social&label=Follow%20akashnet_)](https://x.com/akashnet_)
+[![X (formerly Twitter) Follow](https://img.shields.io/twitter/follow/akashnet_)](https://x.com/akashnet_)
 [![https://discord.gg/akash](https://img.shields.io/badge/discord-join-7289DA.svg?logo=discord&longCache=true&style=flat)](https://discord.gg/akash)
   
 </div>
@@ -138,9 +138,9 @@ Due to the extensive time required to index Akash from block #1, it's recommende
 
 ### Available Backups
 
-- **Mainnet Database (~30 GB):** [cloudmos-akash-mainnet.sql.gz](https://storage.googleapis.com/cloudmos-postgresql-backups/cloudmos-akash-mainnet.sql.gz)
+- **Mainnet Database (~30 GB):** [cloudmos-akash-mainnet.sql.gz](https://storage.googleapis.com/cloudmos-postgresql-backups/console-akash-mainnet.sql.gz)
   - Suitable for scenarios requiring complete data.
-- **Sandbox Database (< 300 MB):** [cloudmos-akash-sandbox.sql.gz](https://storage.googleapis.com/cloudmos-postgresql-backups/cloudmos-akash-sandbox.sql.gz)
+- **Sandbox Database (< 300 MB):** [cloudmos-akash-sandbox.sql.gz](https://storage.googleapis.com/cloudmos-postgresql-backups/console-akash-sandbox.sql.gz)
   - Ideal for most development needs, although it may lack recent chain updates.
 
 ### Restoration Steps
