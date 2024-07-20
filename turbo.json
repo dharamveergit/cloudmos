@@ -1,12 +1,16 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalEnv": ["SKIP_DC_DB"],
+  
   "tasks": {
     "dev": {
       "persistent": true,
       "cache": false,
       "dependsOn": ["//#dc:up:db"],
       "env": ["SKIP_DB"]
+    },"build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
     },
     "//#dc:up:db": {}
   }
