@@ -8,6 +8,8 @@
       "dependsOn": ["//#dc:up:db"],
       "env": ["SKIP_DB"]
     },
-    "//#dc:up:db": {}
+    "//#dc:up:db": {
+      
+    }
   }
 }
