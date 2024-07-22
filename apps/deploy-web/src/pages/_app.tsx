@@ -1,3 +1,7 @@
+import "nprogress/nprogress.css"; //styles of nprogress
+import "@akashnetwork/ui/styles";
+import "../styles/index.css";
+
 import React from "react";
 import { QueryClientProvider } from "react-query";
 import { TooltipProvider } from "@akashnetwork/ui/components";
@@ -28,11 +32,6 @@ import { TemplatesProvider } from "@src/context/TemplatesProvider";
 import { WalletProvider } from "@src/context/WalletProvider";
 import { queryClient } from "@src/queries";
 import { cn } from "@src/utils/styleUtils";
-
-import "nprogress/nprogress.css"; //styles of nprogress
-import "@akashnetwork/ui/styles";
-import "@leapwallet/elements/styles.css";
-import "../styles/index.css";
 
 interface Props extends AppProps {}
 

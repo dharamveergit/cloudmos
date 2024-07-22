@@ -2,8 +2,10 @@ import React, { Dispatch, useEffect, useState } from "react";
 import { Control, useFieldArray, useForm } from "react-hook-form";
 import { Input, Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue, Switch } from "@akashnetwork/ui/components";
 import { GitCommit } from "iconoir-react";
+import { useAtom } from "jotai";
 import { nanoid } from "nanoid";
 
+import remoteDeployStore from "@src/store/remoteDeployStore";
 import { SdlBuilderFormValues, Service } from "@src/types";
 import { defaultService } from "@src/utils/sdl/data";
 import { generateSdl } from "@src/utils/sdl/sdlGenerator";
@@ -22,7 +24,7 @@ const RemoteDeployUpdate = ({
   setEditedManifest: Dispatch<React.SetStateAction<string | null>>;
 }) => {
   console.log(sdlString);
-
+  const [token] = useAtom(remoteDeployStore.tokens);
   const [, setIsInit] = useState(false);
   const { control, watch, setValue } = useForm<SdlBuilderFormValues>({
     defaultValues: {
@@ -79,25 +81,32 @@ const RemoteDeployUpdate = ({
       }
     }
   };
+  console.log(services[0]?.env?.find(e => e.key === "REPO_URL")?.value?.split("/")[2]);
 
   useEffect(() => {
-    if (services?.[0]?.image === "hoomanhq/automation:0.202") {
+    if (services?.[0]?.image === "hoomanhq/automation:0.333") {
       setRemoteDeploy(true);
     }
   }, [services]);
 
   return services?.[0]?.image === "hoomanhq/automation:0.202" ? (
-    <div className="flex flex-col gap-6 rounded border bg-card px-6 py-6">
+    <div className="flex flex-col gap-6 rounded border bg-card px-4 py-6 md:px-6">
       <EnvFormModal control={control} serviceIndex={0} envs={services[0]?.env ?? []} onClose={() => {}} />
-      <div className="flex flex-col gap-5 rounded border bg-card px-6 py-6 text-card-foreground">
-        <div className="flex flex-col gap-2">
-          <h1 className="font-semibold">RollBack</h1>
-          <p className="text-muted-foreground">A unique name for your web service.</p>
-        </div>
+      {/* //type === github */}
+      {token.access_token && services[0]?.env?.find(e => e.key === "REPO_URL")?.value.includes(token.type) && (
+        <>
+          {" "}
+          <div className="flex flex-col gap-5 rounded border bg-card px-6 py-6 text-card-foreground">
+            <div className="flex flex-col gap-2">
+              <h1 className="font-semibold">RollBack</h1>
+              <p className="text-muted-foreground">A unique name for your web service.</p>
+            </div>
 
-        <SelectCommit services={services} control={control} />
-      </div>
-      <Branches services={services} control={control} />
+            <SelectCommit services={services} control={control} />
+          </div>
+          <Branches services={services} control={control} />
+        </>
+      )}
     </div>
   ) : null;
 };

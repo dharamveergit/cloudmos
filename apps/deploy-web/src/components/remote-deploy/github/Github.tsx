@@ -11,7 +11,8 @@ const Github = ({
   setValue,
   services,
   setDeploymentName,
-  deploymentName
+  deploymentName,
+  profile
 }: {
   setDeploymentName: Dispatch<string>;
   deploymentName: string;
@@ -19,6 +20,7 @@ const Github = ({
 
   setValue: any;
   services: Service[];
+  profile: any;
 }) => {
   const { data: repos, isLoading } = useRepos();
 
@@ -31,6 +33,7 @@ const Github = ({
         services={services}
         setDeploymentName={setDeploymentName}
         deploymentName={deploymentName}
+        profile={profile}
       />
       <Branches services={services} control={control} />
     </>

@@ -11,7 +11,8 @@ const Repos = ({
   setValue,
   isLoading,
   services,
-  setDeploymentName
+  setDeploymentName,
+  profile
 }: {
   repos: any;
   setValue: any;
@@ -19,10 +20,13 @@ const Repos = ({
   isLoading: boolean;
   setDeploymentName: Dispatch<string>;
   deploymentName: string;
+  profile: any;
 }) => {
   const [open, setOpen] = useState(false);
   console.log(repos);
   const [token] = useAtom(remoteDeployStore.tokens);
+  console.log(repos);
+
   return (
     <div className="flex flex-col gap-5 rounded border bg-card px-6 py-6 text-card-foreground">
       <div className="flex flex-col gap-2">
@@ -54,16 +58,20 @@ const Repos = ({
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            {repos?.map((repo: any) => (
-              <SelectItem key={repo.html_url} value={repo.html_url}>
-                <div className="flex items-center">
-                  <GithubCircle className="mr-2" />
-                  {repo.name}
+            {//only repos in which i am the owner
 
-                  {repo.private && <Lock className="ml-1 text-xs" />}
-                </div>
-              </SelectItem>
-            ))}
+            repos
+              ?.filter((repo: any) => repo.owner?.login === profile?.login)
+              ?.map((repo: any) => (
+                <SelectItem key={repo.html_url} value={repo.html_url}>
+                  <div className="flex items-center">
+                    <GithubCircle className="mr-2" />
+                    {repo.name}
+
+                    {repo.private && <Lock className="ml-1 text-xs" />}
+                  </div>
+                </SelectItem>
+              ))}
           </SelectGroup>
         </SelectContent>
       </Select>

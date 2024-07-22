@@ -90,7 +90,7 @@ const GithubDeploy = ({
                   </button>
                 )}
               </div>
-              <TabsContent value="git" className="mt-8 md:mt-2">
+              <TabsContent value="git" className="md:mt-2">
                 {fetchingToken || fetchingProfile || fetchingTokenBit || fetchingProfileBit || fetchingTokenGitLab || fetchingProfileGitLab ? (
                   <div className="flex flex-col items-center justify-center gap-2 rounded border px-5 py-10">
                     <Spinner size="large" />
@@ -105,12 +105,12 @@ const GithubDeploy = ({
                     <p className="text-muted-foreground">Let’s Configure and Deploy your new web service ({token?.type})</p>
                   </div>
                 ) : (
-                  <div className="flex flex-col items-center justify-center gap-6 rounded-sm border py-8">
+                  <div className="flex flex-col justify-center gap-6 rounded-sm border px-4 py-8 md:items-center">
                     <div className="flex flex-col items-center justify-center">
                       <h1 className="text-lg font-bold text-primary">Connect Account</h1>
-                      <p className="text-sm text-muted-foreground">Connect your GitHub account to use the GitHub integration.</p>
+                      <p className="text-center text-sm text-muted-foreground">Connect your GitHub account to use the GitHub integration.</p>
                     </div>
-                    <div className="flex gap-3">
+                    <div className="flex flex-col gap-3 md:flex-row">
                       <Button
                         onClick={() => {
                           setToken({ access_token: null, refresh_token: null, type: "bitbucket" });
@@ -170,7 +170,14 @@ const GithubDeploy = ({
           <div className="grid gap-6 md:grid-cols-2">
             {token?.type === "github" ? (
               <>
-                <Github setValue={setValue} services={services} control={control} setDeploymentName={setDeploymentName} deploymentName={deploymentName} />
+                <Github
+                  setValue={setValue}
+                  services={services}
+                  control={control}
+                  setDeploymentName={setDeploymentName}
+                  deploymentName={deploymentName}
+                  profile={userProfile}
+                />
               </>
             ) : token?.type === "bitbucket" ? (
               <Bit
