@@ -10,6 +10,7 @@ import { SdlBuilderFormValues, Service } from "@src/types";
 import { defaultService } from "@src/utils/sdl/data";
 import { generateSdl } from "@src/utils/sdl/sdlGenerator";
 import { importSimpleSdl } from "@src/utils/sdl/sdlImport";
+import { github } from "@src/utils/templates";
 import { useCommits } from "../api/api";
 import { EnvFormModal } from "../EnvFormModal";
 import Branches from "../github/Branches";
@@ -23,7 +24,6 @@ const RemoteDeployUpdate = ({
   setRemoteDeploy: Dispatch<React.SetStateAction<boolean>>;
   setEditedManifest: Dispatch<React.SetStateAction<string | null>>;
 }) => {
-  console.log(sdlString);
   const [token] = useAtom(remoteDeployStore.tokens);
   const [, setIsInit] = useState(false);
   const { control, watch, setValue } = useForm<SdlBuilderFormValues>({
@@ -81,15 +81,14 @@ const RemoteDeployUpdate = ({
       }
     }
   };
-  console.log(services[0]?.env?.find(e => e.key === "REPO_URL")?.value?.split("/")[2]);
 
   useEffect(() => {
-    if (services?.[0]?.image === "hoomanhq/automation:0.333") {
+    if (github.content.includes(services?.[0]?.image)) {
       setRemoteDeploy(true);
     }
   }, [services]);
 
-  return services?.[0]?.image === "hoomanhq/automation:0.202" ? (
+  return github.content.includes(services?.[0]?.image) ? (
     <div className="flex flex-col gap-6 rounded border bg-card px-4 py-6 md:px-6">
       <EnvFormModal control={control} serviceIndex={0} envs={services[0]?.env ?? []} onClose={() => {}} />
       {/* //type === github */}
@@ -114,8 +113,6 @@ const RemoteDeployUpdate = ({
 export default RemoteDeployUpdate;
 
 const SelectCommit = ({ services, control }: { services: Service[]; control: Control<SdlBuilderFormValues> }) => {
-  console.log(services);
-
   const { data } = useCommits(
     services?.[0]?.env?.find(e => e.key === "REPO_URL")?.value?.replace("https://github.com/", "") ?? "",
     services?.[0]?.env?.find(e => e.key === "BRANCH_NAME")?.value ?? ""
@@ -140,7 +137,6 @@ const Field = ({ data, control }: { data: any; control: Control<SdlBuilderFormVa
     name: "services.0.env",
     keyName: "id"
   });
-  console.log(env);
 
   return (
     <div className="flex items-center gap-6">

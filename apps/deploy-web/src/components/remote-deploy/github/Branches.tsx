@@ -17,25 +17,6 @@ const Branches = ({ services, control }: { services: Service[]; control: Control
 
   const { data: branches, isLoading: branchesLoading } = useBranches(selected);
 
-  // useQuery({
-  //   queryKey: ["packageJson", repo?.full_name],
-  //   queryFn: async () => {
-  //     const response = await axios.get(`https://api.github.com/repos/${repo.full_name}/contents/package.json`, {
-  //       headers: {
-  //         Authorization: `Bearer ${token?.access_token}`
-  //       }
-  //     });
-  //     return response.data;
-  //   },
-  //   enabled: !!selected && repos?.length > 0,
-  //   onSettled: data => {
-  //     if (data?.content === undefined) return;
-  //     const content = atob(data.content);
-  //     const parsed = JSON.parse(content);
-  //     setPackageJson(parsed);
-  //   }
-  // });
-
   return (
     <div className="flex flex-col gap-5 rounded border bg-card px-6 py-6 text-card-foreground">
       <div className="flex flex-col gap-2">

@@ -20,7 +20,7 @@ const Repos = ({
   setValue: any;
 }) => {
   const [open, setOpen] = useState(false);
-  console.log(repos);
+
   const [token] = useAtom(remoteDeployStore.tokens);
   return (
     <div className="flex flex-col gap-5 rounded border bg-card px-6 py-6 text-card-foreground">

@@ -41,8 +41,6 @@ export const EnvFormModal: React.FunctionComponent<Props> = ({ control, serviceI
     appendEnv({ id: nanoid(), key: "", value: "", isSecret: false });
   };
 
-  console.log(envs);
-
   return (
     <div className="flex flex-col gap-3 rounded md:border md:p-4">
       <h1 className="text-sm font-bold">Environment Variables</h1>

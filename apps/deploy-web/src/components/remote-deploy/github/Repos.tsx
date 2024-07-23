@@ -1,11 +1,12 @@
 import { Dispatch, useState } from "react";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue, Spinner } from "@akashnetwork/ui/components";
-import { GithubCircle, Lock } from "iconoir-react";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectSeparator, SelectTrigger, SelectValue, Spinner } from "@akashnetwork/ui/components";
+import { GithubCircle, Lock, Plus } from "iconoir-react";
 import { useAtom } from "jotai";
 import { nanoid } from "nanoid";
 
 import remoteDeployStore from "@src/store/remoteDeployStore";
 import { Service } from "@src/types";
+import { handleLogin } from "../api/api";
 const Repos = ({
   repos,
   setValue,
@@ -23,9 +24,8 @@ const Repos = ({
   profile: any;
 }) => {
   const [open, setOpen] = useState(false);
-  console.log(repos);
+
   const [token] = useAtom(remoteDeployStore.tokens);
-  console.log(repos);
 
   return (
     <div className="flex flex-col gap-5 rounded border bg-card px-6 py-6 text-card-foreground">
@@ -41,13 +41,16 @@ const Repos = ({
         value={services?.[0]?.env?.find(e => e.key === "REPO_URL")?.value}
         open={open}
         onValueChange={value => {
-          setValue("services.0.env", [
-            { id: nanoid(), key: "REPO_URL", value: value, isSecret: false },
-            { id: nanoid(), key: "BRANCH_NAME", value: repos?.find(repo => repo.html_url === value)?.default_branch, isSecret: false },
-
-            { id: nanoid(), key: "ACCESS_TOKEN", value: token?.access_token, isSecret: false }
-          ]);
-          setDeploymentName(repos?.find(repo => repo.html_url === value)?.name);
+          if (value === "add") {
+            handleLogin();
+            return;
+          }
+          const curRepo = repos?.find(repo => repo.html_url === value);
+          const access_token = { id: nanoid(), key: "ACCESS_TOKEN", value: token?.access_token, isSecret: false };
+          const repo_url = { id: nanoid(), key: "REPO_URL", value: value, isSecret: false };
+          const branch_name = { id: nanoid(), key: "BRANCH_NAME", value: curRepo?.default_branch, isSecret: false };
+          setValue("services.0.env", curRepo?.private ? [repo_url, branch_name, access_token] : [repo_url, branch_name]);
+          setDeploymentName(curRepo?.name);
         }}
       >
         <SelectTrigger className="w-full">
@@ -58,9 +61,15 @@ const Repos = ({
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            {//only repos in which i am the owner
+            <SelectItem value="add">
+              <div className="flex items-center">
+                <Plus className="mr-2" />
+                Add More Repositories
+              </div>
+            </SelectItem>
+            <SelectSeparator />
 
-            repos
+            {repos
               ?.filter((repo: any) => repo.owner?.login === profile?.login)
               ?.map((repo: any) => (
                 <SelectItem key={repo.html_url} value={repo.html_url}>
@@ -72,6 +81,7 @@ const Repos = ({
                   </div>
                 </SelectItem>
               ))}
+            {/* add more repos */}
           </SelectGroup>
         </SelectContent>
       </Select>

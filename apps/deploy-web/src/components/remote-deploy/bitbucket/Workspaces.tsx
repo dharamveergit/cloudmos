@@ -11,7 +11,6 @@ const WorkSpaces = ({ isLoading, workSpaces, setWorkSpaces }: { isLoading: boole
 
   const [token] = useAtom(remoteDeployStore.tokens);
   const { data, isLoading: loadingWorkSpaces } = useWorkspaces();
-  console.log(data);
 
   return (
     <div className="flex flex-col gap-5 rounded border bg-card px-6 py-6 text-card-foreground">

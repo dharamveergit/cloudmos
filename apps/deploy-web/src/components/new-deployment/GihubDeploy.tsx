@@ -79,16 +79,15 @@ const GithubDeploy = ({
                   <TabsTrigger value="git">Git Provider</TabsTrigger>
                   <TabsTrigger value="public">Public Git Repository</TabsTrigger>
                 </TabsList>
-                {token?.access_token && process.env.NODE_ENV === "development" && (
-                  <button
-                    className="hidden text-primary md:block"
-                    onClick={() => {
-                      setToken({ access_token: null, refresh_token: null, type: "github" });
-                    }}
-                  >
-                    Logout
-                  </button>
-                )}
+
+                <button
+                  className="hidden text-primary md:block"
+                  onClick={() => {
+                    setToken({ access_token: null, refresh_token: null, type: "github" });
+                  }}
+                >
+                  Logout
+                </button>
               </div>
               <TabsContent value="git" className="md:mt-2">
                 {fetchingToken || fetchingProfile || fetchingTokenBit || fetchingProfileBit || fetchingTokenGitLab || fetchingProfileGitLab ? (

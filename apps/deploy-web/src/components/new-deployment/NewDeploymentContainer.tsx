@@ -56,6 +56,8 @@ export const NewDeploymentContainer: FC = () => {
       setSelectedTemplate(hardcodedTemplates.find(t => t.title === "GitHub") as TemplateCreation);
       setEditedManifest(hardcodedTemplates.find(t => t.title === "GitHub")?.content as string);
       setGithub(true);
+    } else {
+      setGithub(false);
     }
 
     const queryStep = searchParams?.get("step");

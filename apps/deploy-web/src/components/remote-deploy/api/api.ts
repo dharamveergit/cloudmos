@@ -57,14 +57,10 @@ export const useRepos = () => {
     },
     onError: (error: AxiosError<{ message: string }>) => {
       if (error?.response?.data?.message === "Bad credentials") {
-        console.log("Bad credentials");
       }
     },
     onSettled: data => {
-      console.log(data);
-
       if (data?.message === "Bad credentials") {
-        console.log("Bad credentials");
       }
     },
     enabled: !!token?.access_token && token.type === "github"
@@ -84,8 +80,6 @@ export const useFetchAccessToken = () => {
       return response.data;
     },
     onSuccess: data => {
-      console.log(data);
-
       setToken({
         access_token: data.access_token,
         refresh_token: data.refresh_token,
@@ -98,7 +92,6 @@ export const useFetchAccessToken = () => {
 
 export const useBranches = (repo?: string, fetch?: boolean) => {
   const [token] = useAtom(remoteDeployStore.tokens);
-  console.log("fetch", fetch);
 
   return useQuery({
     queryKey: ["branches", repo, token?.access_token],
@@ -131,5 +124,27 @@ export const useCommits = (repo: string, branch: string) => {
     },
 
     enabled: !!token?.access_token && token.type === "github" && !!repo && !!branch
+  });
+};
+
+export const usePackageJson = (repo: string, onSettled: (data: any) => void) => {
+  const [token] = useAtom(remoteDeployStore.tokens);
+  return useQuery({
+    queryKey: ["packageJson", repo],
+    queryFn: async () => {
+      const response = await axios.get(`https://api.github.com/repos/${repo}/contents/package.json`, {
+        headers: {
+          Authorization: `Bearer ${token?.access_token}`
+        }
+      });
+      return response.data;
+    },
+    enabled: !!token?.access_token && token.type === "github" && !!repo,
+    onSettled: data => {
+      if (data?.content === undefined) return;
+      const content = atob(data.content);
+      const parsed = JSON.parse(content);
+      onSettled(parsed);
+    }
   });
 };

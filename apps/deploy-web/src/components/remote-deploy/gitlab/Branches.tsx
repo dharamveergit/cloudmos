@@ -4,11 +4,9 @@ import { nanoid } from "nanoid";
 
 import { SdlBuilderFormValues, Service } from "@src/types";
 import { useGitLabBranches } from "../api/gitlab-api";
-import { removeInitialUrl } from "../utils";
 
 const Branches = ({ repos, services, control }: { repos: any; services: Service[]; control: Control<SdlBuilderFormValues> }) => {
   const selected = repos?.find(e => e.web_url === services?.[0]?.env?.find(e => e.key === "REPO_URL")?.value)?.id;
-  console.log(selected);
 
   const { data: branches, isLoading: branchesLoading } = useGitLabBranches(selected);
   const { fields, append, update } = useFieldArray({

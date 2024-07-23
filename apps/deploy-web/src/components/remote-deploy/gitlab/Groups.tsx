@@ -12,7 +12,6 @@ const Groups = ({ isLoading, group, setGroup }: { isLoading: boolean; group: str
 
   const [token] = useAtom(remoteDeployStore.tokens);
   const { data, isLoading: loadingWorkSpaces } = useGitLabGroups();
-  console.log(data);
 
   return (
     <div className="flex flex-col gap-5 rounded border bg-card px-6 py-6 text-card-foreground">
