@@ -80,14 +80,16 @@ const GithubDeploy = ({
                   <TabsTrigger value="public">Public Git Repository</TabsTrigger>
                 </TabsList>
 
-                <button
-                  className="hidden text-primary md:block"
-                  onClick={() => {
-                    setToken({ access_token: null, refresh_token: null, type: "github" });
-                  }}
-                >
-                  Logout
-                </button>
+                {token?.access_token && (
+                  <button
+                    className="hidden text-primary md:block"
+                    onClick={() => {
+                      setToken({ access_token: null, refresh_token: null, type: "github" });
+                    }}
+                  >
+                    Logout
+                  </button>
+                )}
               </div>
               <TabsContent value="git" className="md:mt-2">
                 {fetchingToken || fetchingProfile || fetchingTokenBit || fetchingProfileBit || fetchingTokenGitLab || fetchingProfileGitLab ? (
