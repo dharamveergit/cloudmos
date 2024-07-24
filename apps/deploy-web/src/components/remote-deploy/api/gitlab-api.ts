@@ -8,7 +8,7 @@ import { PROXY_API_URL_AUTH } from "../utils";
 
 // ?step=edit-deployment&type=github
 const CLIEND_ID = "f8b7584c38a6aaba2315e3c377513debd589e0a06bf15cc3fd96b1dd713b19ca";
-const REDIRECT_URL = "http://localhost:3000/new-deployment";
+const REDIRECT_URL = "https://akashconsole.vercel.app/new-deployment";
 
 export const handleGitLabLogin = () => {
   window.location.href = `https://gitlab.com/oauth/authorize?client_id=${CLIEND_ID}&redirect_uri=${REDIRECT_URL}&response_type=code&scope=read_user+read_repository+read_api&state=gitlab`;
