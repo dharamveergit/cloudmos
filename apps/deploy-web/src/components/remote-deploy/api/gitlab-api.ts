@@ -46,8 +46,32 @@ export const useGitLabFetchAccessToken = () => {
   });
 };
 
+export const useFetchRefreshGitlabToken = () => {
+  const [token, setToken] = useAtom(remoteDeployStore.tokens);
+
+  return useMutation({
+    mutationFn: async () => {
+      const response = await axios.post(`${PROXY_API_URL_AUTH}/gitlab/refresh`, {
+        refreshToken: token?.refresh_token
+      });
+
+      return response.data;
+    },
+    onSuccess: data => {
+      setToken({
+        access_token: data.access_token,
+        refresh_token: data.refresh_token,
+        type: "gitlab"
+      });
+    }
+  });
+};
+
 export const useGitLabUserProfile = () => {
   const [token] = useAtom(remoteDeployStore.tokens);
+
+  const { mutate } = useFetchRefreshGitlabToken();
+
   return useQuery({
     queryKey: ["gitlab-user-Profile", token?.access_token],
     queryFn: async () => {
@@ -58,7 +82,12 @@ export const useGitLabUserProfile = () => {
       });
       return response.data;
     },
-    enabled: !!token?.access_token && token.type === "gitlab"
+    enabled: !!token?.access_token && token.type === "gitlab",
+    onError: (error: any) => {
+      if (error.response?.status === 401) {
+        mutate();
+      }
+    }
   });
 };
 

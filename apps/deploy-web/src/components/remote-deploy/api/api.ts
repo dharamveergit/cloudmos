@@ -57,10 +57,12 @@ export const useRepos = () => {
     },
     onError: (error: AxiosError<{ message: string }>) => {
       if (error?.response?.data?.message === "Bad credentials") {
+        console.log("Bad credentials");
       }
     },
     onSettled: data => {
       if (data?.message === "Bad credentials") {
+        console.log("Bad credentials");
       }
     },
     enabled: !!token?.access_token && token.type === "github"

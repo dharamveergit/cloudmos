@@ -1,15 +1,11 @@
 import { Dispatch, useState } from "react";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue, Spinner } from "@akashnetwork/ui/components";
-import { Bitbucket, GithubCircle, Lock } from "iconoir-react";
-import { useAtom } from "jotai";
-import { nanoid } from "nanoid";
+import { Bitbucket } from "iconoir-react";
 
-import remoteDeployStore from "@src/store/remoteDeployStore";
 import { useWorkspaces } from "../api/bitbucket-api";
-const WorkSpaces = ({ isLoading, workSpaces, setWorkSpaces }: { isLoading: boolean; workSpaces: string; setWorkSpaces: Dispatch<string> }) => {
+const WorkSpaces = ({ isLoading, setWorkSpaces }: { isLoading: boolean; workSpaces: string; setWorkSpaces: Dispatch<string> }) => {
   const [open, setOpen] = useState(false);
 
-  const [token] = useAtom(remoteDeployStore.tokens);
   const { data, isLoading: loadingWorkSpaces } = useWorkspaces();
 
   return (
