@@ -82,6 +82,7 @@ export function DeploymentDetail() {
       }
     }
   });
+
   const isDeploymentNotFound = (deploymentError && (deploymentError as any).response?.data?.message?.includes("Deployment not found")) || !address;
   const hasLeases = leases && leases.length > 0;
   const { isLocalCertMatching, localCert, isCreatingCert, createCertificate } = useCertificate();
