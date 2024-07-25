@@ -10,7 +10,8 @@ const Repos = ({
   repos,
   setValue,
   isLoading,
-  setDeploymentName
+  setDeploymentName,
+  services
 }: {
   services: Service[];
   isLoading: boolean;
@@ -20,6 +21,7 @@ const Repos = ({
   setValue: any;
 }) => {
   const [open, setOpen] = useState(false);
+  console.log(services);
 
   const [token] = useAtom(remoteDeployStore.tokens);
   return (
@@ -38,7 +40,7 @@ const Repos = ({
           setValue("services.0.env", [
             { id: nanoid(), key: "REPO_URL", value: value, isSecret: false },
             { id: nanoid(), key: "BRANCH_NAME", value: repos?.find(e => e.web_url === value)?.default_branch, isSecret: false },
-            { id: nanoid(), key: "ACCESS_TOKEN", value: token?.access_token, isSecret: true }
+            { id: nanoid(), key: "GITLAB_TOKEN", value: "50c34d429b0ba25d0b597caf1be7a741e63b8acd889e6f52b4f78242ae7fe7e1", isSecret: false }
           ]);
 
           setDeploymentName(repos?.find(e => e.web_url === value)?.name);

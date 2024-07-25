@@ -24,6 +24,8 @@ const RemoteDeployUpdate = ({
   setRemoteDeploy: Dispatch<React.SetStateAction<boolean>>;
   setEditedManifest: Dispatch<React.SetStateAction<string | null>>;
 }) => {
+  console.log(sdlString);
+
   const [token] = useAtom(remoteDeployStore.tokens);
   const [, setIsInit] = useState(false);
   const { control, watch, setValue } = useForm<SdlBuilderFormValues>({

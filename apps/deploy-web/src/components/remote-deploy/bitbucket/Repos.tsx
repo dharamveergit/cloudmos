@@ -36,7 +36,7 @@ const Repos = ({
           setValue("services.0.env", [
             { id: nanoid(), key: "REPO_URL", value: value, isSecret: false },
             { id: nanoid(), key: "BRANCH_NAME", value: repos?.values?.find(repo => repo?.links?.self?.href === value)?.mainbranch?.name, isSecret: false },
-            { id: nanoid(), key: "ACCESS_TOKEN", value: token?.access_token, isSecret: true }
+            { id: nanoid(), key: "BITBUCKET_TOKEN", value: token?.access_token, isSecret: true }
           ]);
           setDeploymentName(repos?.values?.find(repo => repo?.links?.self?.href === value)?.name);
         }}

@@ -11,7 +11,7 @@ const CLIEND_ID = "f8b7584c38a6aaba2315e3c377513debd589e0a06bf15cc3fd96b1dd713b1
 const REDIRECT_URL = "https://akashconsole.vercel.app/new-deployment";
 
 export const handleGitLabLogin = () => {
-  window.location.href = `https://gitlab.com/oauth/authorize?client_id=${CLIEND_ID}&redirect_uri=${REDIRECT_URL}&response_type=code&scope=read_user+read_repository+read_api&state=gitlab`;
+  window.location.href = `https://gitlab.com/oauth/authorize?client_id=${CLIEND_ID}&redirect_uri=${REDIRECT_URL}&response_type=code&scope=read_user+read_repository+read_api+api&state=gitlab`;
 };
 
 const axiosInstance = axios.create({
