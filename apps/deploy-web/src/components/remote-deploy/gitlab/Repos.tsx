@@ -54,16 +54,19 @@ const Repos = ({
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            {repos?.map((repo: any) => (
-              <SelectItem key={repo?.name} value={repo?.web_url}>
-                <div className="flex items-center">
-                  <GitlabFull className="mr-2" />
-                  {repo?.name}
+            {/* //only show public repos */}
+            {repos
+              ?.filter((repo: any) => repo.visibility === "public")
+              ?.map((repo: any) => (
+                <SelectItem key={repo?.name} value={repo?.web_url}>
+                  <div className="flex items-center">
+                    <GitlabFull className="mr-2" />
+                    {repo?.name}
 
-                  {repo?.visibility === "private" && <Lock className="ml-1 text-xs" />}
-                </div>
-              </SelectItem>
-            ))}
+                    {repo?.visibility === "private" && <Lock className="ml-1 text-xs" />}
+                  </div>
+                </SelectItem>
+              ))}
           </SelectGroup>
         </SelectContent>
       </Select>

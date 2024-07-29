@@ -49,16 +49,18 @@ const Repos = ({
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            {repos?.values?.map((repo: any) => (
-              <SelectItem key={repo?.full_name} value={repo?.links?.self?.href}>
-                <div className="flex items-center">
-                  <Bitbucket className="mr-2" />
-                  {repo?.name}
+            {repos?.values
+              ?.filter((repo: any) => !repo?.is_private)
+              .map((repo: any) => (
+                <SelectItem key={repo?.full_name} value={repo?.links?.self?.href}>
+                  <div className="flex items-center">
+                    <Bitbucket className="mr-2" />
+                    {repo?.name}
 
-                  {repo?.is_private && <Lock className="ml-1 text-xs" />}
-                </div>
-              </SelectItem>
-            ))}
+                    {repo?.is_private && <Lock className="ml-1 text-xs" />}
+                  </div>
+                </SelectItem>
+              ))}
           </SelectGroup>
         </SelectContent>
       </Select>
