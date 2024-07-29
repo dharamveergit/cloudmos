@@ -40,7 +40,7 @@ const Repos = ({
           setValue("services.0.env", [
             { id: nanoid(), key: "REPO_URL", value: value, isSecret: false },
             { id: nanoid(), key: "BRANCH_NAME", value: repos?.find(e => e.web_url === value)?.default_branch, isSecret: false },
-            { id: nanoid(), key: "ACCESS_TOKEN", value: token?.access_token, isSecret: false }
+            { id: nanoid(), key: "GITLAB_ACCESS_TOKEN", value: token?.access_token, isSecret: false }
           ]);
 
           setDeploymentName(repos?.find(e => e.web_url === value)?.name);
@@ -55,18 +55,16 @@ const Repos = ({
         <SelectContent>
           <SelectGroup>
             {/* //only show public repos */}
-            {repos
-              ?.filter((repo: any) => repo.visibility === "public")
-              ?.map((repo: any) => (
-                <SelectItem key={repo?.name} value={repo?.web_url}>
-                  <div className="flex items-center">
-                    <GitlabFull className="mr-2" />
-                    {repo?.name}
+            {repos?.map((repo: any) => (
+              <SelectItem key={repo?.name} value={repo?.web_url}>
+                <div className="flex items-center">
+                  <GitlabFull className="mr-2" />
+                  {repo?.name}
 
-                    {repo?.visibility === "private" && <Lock className="ml-1 text-xs" />}
-                  </div>
-                </SelectItem>
-              ))}
+                  {repo?.visibility === "private" && <Lock className="ml-1 text-xs" />}
+                </div>
+              </SelectItem>
+            ))}
           </SelectGroup>
         </SelectContent>
       </Select>

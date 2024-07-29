@@ -1,11 +1,9 @@
 import { Dispatch, useState } from "react";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue, Spinner } from "@akashnetwork/ui/components";
-import { Bitbucket, GithubCircle, GitlabFull, Lock } from "iconoir-react";
+import { GitlabFull } from "iconoir-react";
 import { useAtom } from "jotai";
-import { nanoid } from "nanoid";
 
 import remoteDeployStore from "@src/store/remoteDeployStore";
-import { useWorkspaces } from "../api/bitbucket-api";
 import { useGitLabGroups } from "../api/gitlab-api";
 const Groups = ({ isLoading, group, setGroup }: { isLoading: boolean; group: string; setGroup: Dispatch<string> }) => {
   const [open, setOpen] = useState(false);

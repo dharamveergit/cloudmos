@@ -33,10 +33,12 @@ const Repos = ({
         }}
         open={open}
         onValueChange={value => {
+          const currentRepo = repos?.values?.find(repo => repo?.links?.self?.href === value);
           setValue("services.0.env", [
             { id: nanoid(), key: "REPO_URL", value: value, isSecret: false },
             { id: nanoid(), key: "BRANCH_NAME", value: repos?.values?.find(repo => repo?.links?.self?.href === value)?.mainbranch?.name, isSecret: false },
-            { id: nanoid(), key: "BITBUCKET_TOKEN", value: token?.access_token, isSecret: true }
+            { id: nanoid(), key: "BITBUCKET_ACCESS_TOKEN", value: token?.access_token, isSecret: true },
+            { id: nanoid(), key: "BITBUCKET_USER", value: currentRepo?.owner?.display_name, isSecret: false }
           ]);
           setDeploymentName(repos?.values?.find(repo => repo?.links?.self?.href === value)?.name);
         }}
@@ -49,18 +51,16 @@ const Repos = ({
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            {repos?.values
-              ?.filter((repo: any) => !repo?.is_private)
-              .map((repo: any) => (
-                <SelectItem key={repo?.full_name} value={repo?.links?.self?.href}>
-                  <div className="flex items-center">
-                    <Bitbucket className="mr-2" />
-                    {repo?.name}
+            {repos?.values?.map((repo: any) => (
+              <SelectItem key={repo?.full_name} value={repo?.links?.self?.href}>
+                <div className="flex items-center">
+                  <Bitbucket className="mr-2" />
+                  {repo?.name}
 
-                    {repo?.is_private && <Lock className="ml-1 text-xs" />}
-                  </div>
-                </SelectItem>
-              ))}
+                  {repo?.is_private && <Lock className="ml-1 text-xs" />}
+                </div>
+              </SelectItem>
+            ))}
           </SelectGroup>
         </SelectContent>
       </Select>
