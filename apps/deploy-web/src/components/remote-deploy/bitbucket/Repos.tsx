@@ -18,6 +18,7 @@ const Repos = ({
   deploymentName: string;
 }) => {
   const [open, setOpen] = useState(false);
+  console.log(repos);
 
   const [token] = useAtom(remoteDeployStore.tokens);
   return (
@@ -33,14 +34,14 @@ const Repos = ({
         }}
         open={open}
         onValueChange={value => {
-          const currentRepo = repos?.values?.find(repo => repo?.links?.self?.href === value);
+          const currentRepo = repos?.values?.find(repo => repo?.links?.html?.href === value);
           setValue("services.0.env", [
             { id: nanoid(), key: "REPO_URL", value: value, isSecret: false },
-            { id: nanoid(), key: "BRANCH_NAME", value: repos?.values?.find(repo => repo?.links?.self?.href === value)?.mainbranch?.name, isSecret: false },
-            { id: nanoid(), key: "BITBUCKET_ACCESS_TOKEN", value: token?.access_token, isSecret: true },
+            { id: nanoid(), key: "BRANCH_NAME", value: repos?.values?.find(repo => repo?.links?.html?.href === value)?.mainbranch?.name, isSecret: false },
+            { id: nanoid(), key: "BITBUCKET_ACCESS_TOKEN", value: token?.access_token, isSecret: false },
             { id: nanoid(), key: "BITBUCKET_USER", value: currentRepo?.owner?.display_name, isSecret: false }
           ]);
-          setDeploymentName(repos?.values?.find(repo => repo?.links?.self?.href === value)?.name);
+          setDeploymentName(repos?.values?.find(repo => repo?.links?.html?.href === value)?.name);
         }}
       >
         <SelectTrigger className="w-full">
@@ -52,7 +53,7 @@ const Repos = ({
         <SelectContent>
           <SelectGroup>
             {repos?.values?.map((repo: any) => (
-              <SelectItem key={repo?.full_name} value={repo?.links?.self?.href}>
+              <SelectItem key={repo?.full_name} value={repo?.links?.html?.href}>
                 <div className="flex items-center">
                   <Bitbucket className="mr-2" />
                   {repo?.name}

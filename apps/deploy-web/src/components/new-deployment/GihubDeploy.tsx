@@ -30,6 +30,7 @@ const GithubDeploy = ({
   deploymentName: string;
 }) => {
   const [token, setToken] = useAtom(remoteDeployStore.tokens);
+  console.log(services);
 
   const { data: userProfile, isLoading: fetchingProfile } = useUserProfile();
   const { data: userProfileBit, isLoading: fetchingProfileBit } = useBitUserProfile();

@@ -20,8 +20,30 @@ const axiosInstance = axios.create({
   }
 });
 
+export const useFetchRefreshBitToken = () => {
+  const [token, setToken] = useAtom(remoteDeployStore.tokens);
+
+  return useMutation({
+    mutationFn: async () => {
+      const response = await axios.post(`${PROXY_API_URL_AUTH}/bitbucket/refresh`, {
+        refreshToken: token?.refresh_token
+      });
+
+      return response.data;
+    },
+    onSuccess: data => {
+      setToken({
+        access_token: data.access_token,
+        refresh_token: data.refresh_token,
+        type: "bitbucket"
+      });
+    }
+  });
+};
+
 export const useBitUserProfile = () => {
   const [token] = useAtom(remoteDeployStore.tokens);
+  const { mutate } = useFetchRefreshBitToken();
   return useQuery({
     queryKey: ["userProfile", token.access_token],
     queryFn: async () => {
@@ -32,7 +54,12 @@ export const useBitUserProfile = () => {
       });
       return response.data;
     },
-    enabled: !!token?.access_token && token.type === "bitbucket"
+    enabled: !!token?.access_token && token.type === "bitbucket",
+    onError: (error: any) => {
+      if (error.response?.status === 401) {
+        mutate();
+      }
+    }
   });
 };
 
