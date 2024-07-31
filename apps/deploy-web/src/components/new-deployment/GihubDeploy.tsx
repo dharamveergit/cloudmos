@@ -1,6 +1,6 @@
 import { Dispatch, useEffect, useState } from "react";
 import { Button, Spinner, Tabs, TabsContent, TabsList, TabsTrigger } from "@akashnetwork/ui/components";
-import { Bitbucket, Github as GitIcon, GitlabFull } from "iconoir-react";
+import { Bitbucket, CoinsSwap, Github as GitIcon, GitlabFull } from "iconoir-react";
 import { useAtom } from "jotai";
 
 import remoteDeployStore from "@src/store/remoteDeployStore";
@@ -83,12 +83,12 @@ const GithubDeploy = ({
 
                 {token?.access_token && (
                   <button
-                    className="hidden text-primary md:block"
+                    className="hidden items-center gap-2 text-primary md:flex"
                     onClick={() => {
                       setToken({ access_token: null, refresh_token: null, type: "github" });
                     }}
                   >
-                    Logout
+                    <CoinsSwap className="text-sm" /> Switch Git Provider
                   </button>
                 )}
               </div>

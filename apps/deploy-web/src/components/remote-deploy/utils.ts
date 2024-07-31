@@ -5,7 +5,18 @@ import { SdlBuilderFormValues, Service } from "@src/types";
 
 export type OAuth = "github" | "gitlab" | "bitbucket";
 export const PROXY_API_URL_AUTH = "https://proxy-console-github.vercel.app";
-export const hiddenEnv = ["REPO_URL", "BRANCH_NAME", "ACCESS_TOKEN", "BUILD_DIRECTORY", "BUILD_COMMAND", "NODE_VERSION", "CUSTOM_SRC", "COMMIT_HASH"];
+export const hiddenEnv = [
+  "REPO_URL",
+  "BRANCH_NAME",
+  "ACCESS_TOKEN",
+  "BUILD_DIRECTORY",
+  "BUILD_COMMAND",
+  "NODE_VERSION",
+  "CUSTOM_SRC",
+  "COMMIT_HASH",
+  "GITLAB_PROJECT_ID",
+  "GITLAB_ACCESS_TOKEN"
+];
 export const REDIRECT_URL = "http://localhost:3000/new-deployment?step=edit-deployment&type=github";
 export type ServiceControl = Control<SdlBuilderFormValues>;
 export function appendEnv(key: string, value: string, isSecret: boolean, setValue: any, services: Service[]) {

@@ -107,7 +107,7 @@ export const useGitLabGroups = () => {
   });
 };
 
-export const useGitLabReposByGroup = (group: string) => {
+export const useGitLabReposByGroup = (group: string | undefined) => {
   const [token] = useAtom(remoteDeployStore.tokens);
   return useQuery({
     queryKey: ["repos", token?.access_token, group],
@@ -136,5 +136,22 @@ export const useGitLabBranches = (repo?: string) => {
       return response.data;
     },
     enabled: !!token?.access_token && token.type === "gitlab" && !!repo
+  });
+};
+
+export const useGitLabCommits = (repo?: string, branch?: string) => {
+  const [token] = useAtom(remoteDeployStore.tokens);
+  return useQuery({
+    queryKey: ["commits", repo, branch, token?.access_token, repo, branch],
+    queryFn: async () => {
+      const response = await axiosInstance.get(`/projects/${repo}/repository/commits?ref_name=${branch}`, {
+        headers: {
+          Authorization: `Bearer ${token?.access_token}`
+        }
+      });
+      return response.data;
+    },
+
+    enabled: !!token?.access_token && token.type === "gitlab" && !!repo && !!branch
   });
 };

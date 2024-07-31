@@ -37,10 +37,22 @@ const Repos = ({
         }}
         open={open}
         onValueChange={value => {
+          const currentRepo = repos?.find(repo => repo?.web_url === value);
           setValue("services.0.env", [
-            { id: nanoid(), key: "REPO_URL", value: value, isSecret: false },
+            {
+              id: nanoid(),
+              key: "REPO_URL",
+              value: value,
+              isSecret: false
+            },
             { id: nanoid(), key: "BRANCH_NAME", value: repos?.find(e => e.web_url === value)?.default_branch, isSecret: false },
-            { id: nanoid(), key: "GITLAB_ACCESS_TOKEN", value: token?.access_token, isSecret: false }
+            { id: nanoid(), key: "GITLAB_ACCESS_TOKEN", value: token?.access_token, isSecret: false },
+            {
+              id: nanoid(),
+              key: "GITLAB_PROJECT_ID",
+              value: currentRepo?.id?.toString(),
+              isSecret: false
+            }
           ]);
 
           setDeploymentName(repos?.find(e => e.web_url === value)?.name);

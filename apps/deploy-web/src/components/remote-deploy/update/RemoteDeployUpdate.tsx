@@ -12,8 +12,10 @@ import { generateSdl } from "@src/utils/sdl/sdlGenerator";
 import { importSimpleSdl } from "@src/utils/sdl/sdlImport";
 import { github } from "@src/utils/templates";
 import { useCommits } from "../api/api";
+import { useGitLabCommits } from "../api/gitlab-api";
 import { EnvFormModal } from "../EnvFormModal";
 import Branches from "../github/Branches";
+import GitBranches from "../gitlab/Branches";
 
 const RemoteDeployUpdate = ({
   sdlString,
@@ -92,7 +94,7 @@ const RemoteDeployUpdate = ({
 
   return github.content.includes(services?.[0]?.image) ? (
     <div className="flex flex-col gap-6 rounded border bg-card px-4 py-6 md:px-6">
-      <EnvFormModal control={control} serviceIndex={0} envs={services[0]?.env ?? []} onClose={() => {}} />
+      {services[0]?.env?.length && <EnvFormModal control={control} serviceIndex={0} envs={services[0]?.env ?? []} onClose={() => {}} />}
       {/* //type === github */}
       {token.access_token && services[0]?.env?.find(e => e.key === "REPO_URL")?.value.includes(token.type) && (
         <>
@@ -105,7 +107,11 @@ const RemoteDeployUpdate = ({
 
             <SelectCommit services={services} control={control} />
           </div>
-          <Branches services={services} control={control} />
+          {token?.type === "github" ? (
+            <Branches services={services} control={control} />
+          ) : token?.type === "gitlab" ? (
+            <GitBranches control={control} services={services} />
+          ) : null}
         </>
       )}
     </div>
@@ -119,7 +125,32 @@ const SelectCommit = ({ services, control }: { services: Service[]; control: Con
     services?.[0]?.env?.find(e => e.key === "REPO_URL")?.value?.replace("https://github.com/", "") ?? "",
     services?.[0]?.env?.find(e => e.key === "BRANCH_NAME")?.value ?? ""
   );
-  return <Field data={data} control={control} />;
+
+  const { data: labCommits } = useGitLabCommits(
+    services?.[0]?.env?.find(e => e.key === "GITLAB_PROJECT_ID")?.value,
+    services?.[0]?.env?.find(e => e.key === "BRANCH_NAME")?.value
+  );
+
+  console.log(labCommits);
+
+  return (
+    <Field
+      data={
+        data?.length > 0
+          ? data.map(commit => ({
+              name: commit.commit.message,
+              value: commit.sha,
+              date: new Date(commit.commit.author.date)
+            }))
+          : labCommits?.map(commit => ({
+              name: commit.title,
+              value: commit.id,
+              date: new Date(commit.authored_date)
+            }))
+      }
+      control={control}
+    />
+  );
 };
 
 const Field = ({ data, control }: { data: any; control: Control<SdlBuilderFormValues> }) => {
@@ -130,7 +161,6 @@ const Field = ({ data, control }: { data: any; control: Control<SdlBuilderFormVa
     keyName: "id"
   });
   const {
-    fields: env,
     append,
 
     update
@@ -183,12 +213,12 @@ const Field = ({ data, control }: { data: any; control: Control<SdlBuilderFormVa
           <SelectContent>
             <SelectGroup>
               {data?.map((repo: any) => (
-                <SelectItem key={repo.sha} value={repo.sha}>
+                <SelectItem key={repo.value} value={repo.value}>
                   <div className="flex items-center">
                     <GitCommit className="mr-2" />
-                    {repo?.commit?.message?.split("\n")[0]}
+                    {repo?.name?.split("\n")[0]}
 
-                    <p className="ml-2 text-xs text-muted-foreground">{new Date(repo?.commit?.author?.date).toLocaleDateString()}</p>
+                    <p className="ml-2 text-xs text-muted-foreground">{new Date(repo?.date).toLocaleDateString()}</p>
                   </div>
                 </SelectItem>
               ))}

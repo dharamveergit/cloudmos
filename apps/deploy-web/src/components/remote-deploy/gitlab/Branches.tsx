@@ -3,10 +3,13 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { nanoid } from "nanoid";
 
 import { SdlBuilderFormValues, Service } from "@src/types";
-import { useGitLabBranches } from "../api/gitlab-api";
+import { useGitLabBranches, useGitLabReposByGroup } from "../api/gitlab-api";
 
-const Branches = ({ repos, services, control }: { repos: any; services: Service[]; control: Control<SdlBuilderFormValues> }) => {
-  const selected = repos?.find(e => e.web_url === services?.[0]?.env?.find(e => e.key === "REPO_URL")?.value)?.id;
+const Branches = ({ repos, services, control }: { repos?: any; services: Service[]; control: Control<SdlBuilderFormValues> }) => {
+  const selected =
+    repos?.length > 0
+      ? repos?.find(e => e.web_url === services?.[0]?.env?.find(e => e.key === "REPO_URL")?.value)?.id
+      : services?.[0]?.env?.find(e => e.key === "GITLAB_PROJECT_ID")?.value;
 
   const { data: branches, isLoading: branchesLoading } = useGitLabBranches(selected);
   const { fields, append, update } = useFieldArray({

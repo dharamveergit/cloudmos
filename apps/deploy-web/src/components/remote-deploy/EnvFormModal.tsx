@@ -45,6 +45,9 @@ export const EnvFormModal: React.FunctionComponent<Props> = ({ control, serviceI
     <div className="flex flex-col gap-3 rounded md:border md:p-4">
       <h1 className="text-sm font-bold">Environment Variables</h1>
       <FormPaper contentClassName=" ">
+        {envs.filter(env => !hiddenEnv.includes(env?.key?.trim())).length === 0 && (
+          <p className="text-sm text-muted-foreground">No environment variables added.</p>
+        )}
         {envs.map((env, envIndex) => {
           return (
             <div key={env.id} className={cn("flex", { ["mb-2"]: envIndex + 1 !== envs.length }, { ["hidden"]: hiddenEnv.includes(env?.key?.trim()) })}>
