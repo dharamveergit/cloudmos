@@ -19,7 +19,7 @@ const Details = ({ services, setValue }) => {
         <CardContent className="p-0">
           <CollapsibleTrigger asChild>
             <div className="flex items-center justify-between p-4">
-              <h1 className="font-semibold">Details</h1>
+              <h1 className="font-semibold">Advanced Configurations</h1>
               <NavArrowDown fontSize="1rem" className={cn("transition-all duration-100", { ["rotate-180"]: expanded })} />
             </div>
           </CollapsibleTrigger>
@@ -29,33 +29,34 @@ const Details = ({ services, setValue }) => {
               <CustomInput
                 onChange={e => appendEnv("BUILD_DIRECTORY", e.target.value, false, setValue, services)}
                 label="Build Directory"
-                description="The Repository Branch used for your private service"
+                description="The custom build directory name for your repo"
                 placeholder="eg. anything"
               />
               <CustomInput
                 onChange={e => appendEnv("BUILD_COMMAND", e.target.value, false, setValue, services)}
                 label="Build Command"
-                description="A unique name for your web service."
+                description="The custom build command for your repo"
                 placeholder="$ yarn"
               />
               <CustomInput
                 onChange={e => appendEnv("CUSTOM_SRC", e.target.value, false, setValue, services)}
                 label="Start Command"
-                description="The Repository Branch used for your private service"
+                description="The custom start command for your repo"
                 placeholder="$ yarn start"
               />
               <CustomInput
                 onChange={e => appendEnv("NODE_VERSION", e.target.value, false, setValue, services)}
                 label="Node Version"
-                description="The Repository Branch used for your private service"
-                placeholder="14"
+                description="By default we use 21, Change the version if needed"
+                placeholder="21"
               />
-              <CustomInput
+              {/* <CustomInput
                 onChange={e => appendEnv("COMMIT_HASH", e.target.value, false, setValue, services)}
                 label="Commit Hash"
-                description="The Repository Branch used for your private service"
+                description="The Commit Hash used for your private service"
+                
                 placeholder="eg. anything"
-              />
+              /> */}
             </div>
           </CollapsibleContent>
         </CardContent>

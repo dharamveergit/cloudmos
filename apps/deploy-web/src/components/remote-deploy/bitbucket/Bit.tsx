@@ -13,7 +13,8 @@ const Bit = ({
   services,
   control,
   setDeploymentName,
-  deploymentName
+  deploymentName,
+  profile
 }: {
   setDeploymentName: Dispatch<string>;
   deploymentName: string;
@@ -21,6 +22,7 @@ const Bit = ({
   setValue: any;
   services: Service[];
   control: ServiceControl;
+  profile: any;
 }) => {
   const [workSpace, setWorkSpace] = useState<string>("");
 
@@ -29,7 +31,7 @@ const Bit = ({
   return (
     <>
       <WorkSpaces isLoading={loading} workSpaces={workSpace} setWorkSpaces={setWorkSpace} />
-      <Repos isLoading={isLoading} repos={repos} setValue={setValue} setDeploymentName={setDeploymentName} deploymentName={deploymentName} />
+      <Repos isLoading={isLoading} repos={repos} setValue={setValue} setDeploymentName={setDeploymentName} deploymentName={deploymentName} profile={profile} />
       <Branches services={services} control={control} />
     </>
   );

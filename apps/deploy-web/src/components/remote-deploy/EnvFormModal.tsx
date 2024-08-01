@@ -1,5 +1,5 @@
 "use client";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useState } from "react";
 import { Control, Controller, useFieldArray } from "react-hook-form";
 import { Button, CustomNoDivTooltip, FormInput, Switch } from "@akashnetwork/ui/components";
 import { Bin, Eye, EyeClosed } from "iconoir-react";
@@ -19,7 +19,7 @@ type Props = {
   children?: ReactNode;
 };
 
-export const EnvFormModal: React.FunctionComponent<Props> = ({ control, serviceIndex, envs: _envs, hasSecretOption = true }) => {
+export const EnvFormModal: React.FunctionComponent<Props> = ({ control, serviceIndex, hasSecretOption = true }) => {
   // const [envs, setEnvs] = useState<EnvironmentVariable[]>(_envs);
   const {
     fields: envs,
@@ -31,11 +31,11 @@ export const EnvFormModal: React.FunctionComponent<Props> = ({ control, serviceI
     keyName: "id"
   });
 
-  useEffect(() => {
-    if (_envs.length === 0) {
-      onAddEnv();
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (_envs.length === 0) {
+  //     onAddEnv();
+  //   }
+  // }, []);
 
   const onAddEnv = () => {
     appendEnv({ id: nanoid(), key: "", value: "", isSecret: false });

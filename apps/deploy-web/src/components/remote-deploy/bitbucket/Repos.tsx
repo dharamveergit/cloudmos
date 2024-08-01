@@ -9,13 +9,15 @@ const Repos = ({
   repos,
   setValue,
   isLoading,
-  setDeploymentName
+  setDeploymentName,
+  profile
 }: {
   repos: any;
   setValue: any;
   isLoading: boolean;
   setDeploymentName: Dispatch<string>;
   deploymentName: string;
+  profile: any;
 }) => {
   const [open, setOpen] = useState(false);
   console.log(repos);
@@ -34,12 +36,12 @@ const Repos = ({
         }}
         open={open}
         onValueChange={value => {
-          const currentRepo = repos?.values?.find(repo => repo?.links?.html?.href === value);
+          // const currentRepo = repos?.values?.find(repo => repo?.links?.html?.href === value);
           setValue("services.0.env", [
             { id: nanoid(), key: "REPO_URL", value: value, isSecret: false },
             { id: nanoid(), key: "BRANCH_NAME", value: repos?.values?.find(repo => repo?.links?.html?.href === value)?.mainbranch?.name, isSecret: false },
             { id: nanoid(), key: "BITBUCKET_ACCESS_TOKEN", value: token?.access_token, isSecret: false },
-            { id: nanoid(), key: "BITBUCKET_USER", value: currentRepo?.owner?.display_name, isSecret: false }
+            { id: nanoid(), key: "BITBUCKET_USER", value: profile?.username, isSecret: false }
           ]);
           setDeploymentName(repos?.values?.find(repo => repo?.links?.html?.href === value)?.name);
         }}

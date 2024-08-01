@@ -63,6 +63,22 @@ export const useBitUserProfile = () => {
   });
 };
 
+export const useBitBucketCommits = (repo?: string) => {
+  const [token] = useAtom(remoteDeployStore.tokens);
+  return useQuery({
+    queryKey: ["commits", repo, token.access_token, repo],
+    queryFn: async () => {
+      const response = await axiosInstance.get(`/repositories/${repo}/commits`, {
+        headers: {
+          Authorization: `Bearer ${token?.access_token}`
+        }
+      });
+      return response.data;
+    },
+    enabled: !!token?.access_token && token.type === "bitbucket" && !!repo
+  });
+};
+
 export const useBitFetchAccessToken = () => {
   const [, setToken] = useAtom(remoteDeployStore.tokens);
   const pathname = usePathname();

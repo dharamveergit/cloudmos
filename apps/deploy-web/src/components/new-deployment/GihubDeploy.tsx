@@ -110,7 +110,7 @@ const GithubDeploy = ({
                   <div className="flex flex-col justify-center gap-6 rounded-sm border px-4 py-8 md:items-center">
                     <div className="flex flex-col items-center justify-center">
                       <h1 className="text-lg font-bold text-primary">Connect Account</h1>
-                      <p className="text-center text-sm text-muted-foreground">Connect your GitHub account to use the GitHub integration.</p>
+                      <p className="text-center text-sm text-muted-foreground">Connect a git provider to access your repositories.</p>
                     </div>
                     <div className="flex flex-col gap-3 md:flex-row">
                       <Button
@@ -154,13 +154,13 @@ const GithubDeploy = ({
               <TabsContent value="public" className="flex flex-col gap-6">
                 <CustomInput
                   label="Repository URL"
-                  description="The Repository Branch used for your private service"
+                  description="The link of the public repo to be deployed"
                   placeholder="eg. anything"
                   onChange={e => appendEnv("REPO_URL", e.target.value, false, setValue, services)}
                 />
                 <CustomInput
                   label="Branch Name"
-                  description="The Repository Branch used for your private service"
+                  description="The git branch branch which is to be deployed"
                   placeholder="eg. anything"
                   onChange={e => appendEnv("BRANCH_NAME", e.target.value, false, setValue, services)}
                 />
@@ -189,6 +189,7 @@ const GithubDeploy = ({
                 control={control}
                 setDeploymentName={setDeploymentName}
                 deploymentName={deploymentName}
+                profile={userProfileBit}
               />
             ) : (
               <GitLab
@@ -204,7 +205,7 @@ const GithubDeploy = ({
         )}
       </div>
       <Details services={services} setValue={setValue} />
-      <Advanced services={services} control={control} />
+      <Advanced services={services} control={control} setValue={setValue} />
     </>
   );
 };

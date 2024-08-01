@@ -15,7 +15,10 @@ export const hiddenEnv = [
   "CUSTOM_SRC",
   "COMMIT_HASH",
   "GITLAB_PROJECT_ID",
-  "GITLAB_ACCESS_TOKEN"
+  "GITLAB_ACCESS_TOKEN",
+  "BITBUCKET_ACCESS_TOKEN",
+  "BITBUCKET_USER",
+  "DISABLE_PULL"
 ];
 export const REDIRECT_URL = "http://localhost:3000/new-deployment?step=edit-deployment&type=github";
 export type ServiceControl = Control<SdlBuilderFormValues>;

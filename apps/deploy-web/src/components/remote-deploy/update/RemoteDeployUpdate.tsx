@@ -12,10 +12,13 @@ import { generateSdl } from "@src/utils/sdl/sdlGenerator";
 import { importSimpleSdl } from "@src/utils/sdl/sdlImport";
 import { github } from "@src/utils/templates";
 import { useCommits } from "../api/api";
+import { useBitBucketCommits } from "../api/bitbucket-api";
 import { useGitLabCommits } from "../api/gitlab-api";
+import BitBranches from "../bitbucket/Branches";
 import { EnvFormModal } from "../EnvFormModal";
 import Branches from "../github/Branches";
 import GitBranches from "../gitlab/Branches";
+import { removeInitialUrl } from "../utils";
 
 const RemoteDeployUpdate = ({
   sdlString,
@@ -111,7 +114,9 @@ const RemoteDeployUpdate = ({
             <Branches services={services} control={control} />
           ) : token?.type === "gitlab" ? (
             <GitBranches control={control} services={services} />
-          ) : null}
+          ) : (
+            <BitBranches control={control} services={services} />
+          )}
         </>
       )}
     </div>
@@ -131,6 +136,7 @@ const SelectCommit = ({ services, control }: { services: Service[]; control: Con
     services?.[0]?.env?.find(e => e.key === "BRANCH_NAME")?.value
   );
 
+  const { data: bitbucketCommits } = useBitBucketCommits(removeInitialUrl(services?.[0]?.env?.find(e => e.key === "REPO_URL")?.value ?? ""));
   console.log(labCommits);
 
   return (
@@ -142,11 +148,17 @@ const SelectCommit = ({ services, control }: { services: Service[]; control: Con
               value: commit.sha,
               date: new Date(commit.commit.author.date)
             }))
-          : labCommits?.map(commit => ({
-              name: commit.title,
-              value: commit.id,
-              date: new Date(commit.authored_date)
-            }))
+          : labCommits?.length > 0
+            ? labCommits?.map(commit => ({
+                name: commit.title,
+                value: commit.id,
+                date: new Date(commit.authored_date)
+              }))
+            : bitbucketCommits?.values?.map(commit => ({
+                name: commit.message,
+                value: commit.hash,
+                date: new Date(commit.date)
+              }))
       }
       control={control}
     />
