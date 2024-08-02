@@ -226,100 +226,102 @@ export const SimpleServiceFormControl: React.FunctionComponent<Props> = ({
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                   <div className="grid gap-4">
-                    <div className="flex items-end">
-                      <Controller
-                        control={control}
-                        name={`services.${serviceIndex}.image`}
-                        rules={{
-                          required: "Docker image name is required.",
-                          validate: value => {
-                            if (imageList) {
-                              return imageList.includes(value);
+                    {!github && (
+                      <div className="flex items-end">
+                        <Controller
+                          control={control}
+                          name={`services.${serviceIndex}.image`}
+                          rules={{
+                            required: "Docker image name is required.",
+                            validate: value => {
+                              if (imageList) {
+                                return imageList.includes(value);
+                              }
+
+                              const hasValidChars = /^[a-z0-9\-_/:.]+$/.test(value);
+
+                              if (!hasValidChars) {
+                                return "Invalid docker image name.";
+                              }
+
+                              return true;
                             }
-
-                            const hasValidChars = /^[a-z0-9\-_/:.]+$/.test(value);
-
-                            if (!hasValidChars) {
-                              return "Invalid docker image name.";
-                            }
-
-                            return true;
-                          }
-                        }}
-                        render={({ field, fieldState }) =>
-                          imageList?.length ? (
-                            <div className="flex flex-grow flex-col">
-                              <Select value={field.value} onValueChange={field.onChange}>
-                                <SelectTrigger className="ml-1" data-testid="ssh-image-select">
-                                  <Image alt="Docker Logo" src="/images/docker.png" layout="fixed" quality={100} width={24} height={18} priority />
-                                  <div className="flex-1 pl-2 text-left">
-                                    <SelectValue placeholder="Select image" />
+                          }}
+                          render={({ field, fieldState }) =>
+                            imageList?.length ? (
+                              <div className="flex flex-grow flex-col">
+                                <Select value={field.value} onValueChange={field.onChange}>
+                                  <SelectTrigger className="ml-1" data-testid="ssh-image-select">
+                                    <Image alt="Docker Logo" src="/images/docker.png" layout="fixed" quality={100} width={24} height={18} priority />
+                                    <div className="flex-1 pl-2 text-left">
+                                      <SelectValue placeholder="Select image" />
+                                    </div>
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectGroup>
+                                      {imageList.map(image => {
+                                        return (
+                                          <SelectItem key={image} value={image} data-testid={`ssh-image-select-${image}`}>
+                                            {image}
+                                          </SelectItem>
+                                        );
+                                      })}
+                                    </SelectGroup>
+                                  </SelectContent>
+                                </Select>
+                                {fieldState.error?.message && <p className="mt-2 text-sm text-red-600">{fieldState.error.message}</p>}
+                              </div>
+                            ) : (
+                              <InputWithIcon
+                                type="text"
+                                label={
+                                  <div className="inline-flex items-center">
+                                    Docker Image / OS
+                                    <CustomTooltip
+                                      title={
+                                        <>
+                                          Docker image of the container.
+                                          <br />
+                                          <br />
+                                          Best practices: avoid using :latest image tags as Akash Providers heavily cache images.
+                                        </>
+                                      }
+                                    >
+                                      <InfoCircle className="ml-2 text-xs text-muted-foreground" />
+                                    </CustomTooltip>
                                   </div>
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <SelectGroup>
-                                    {imageList.map(image => {
-                                      return (
-                                        <SelectItem key={image} value={image} data-testid={`ssh-image-select-${image}`}>
-                                          {image}
-                                        </SelectItem>
-                                      );
-                                    })}
-                                  </SelectGroup>
-                                </SelectContent>
-                              </Select>
-                              {fieldState.error?.message && <p className="mt-2 text-sm text-red-600">{fieldState.error.message}</p>}
-                            </div>
-                          ) : (
-                            <InputWithIcon
-                              type="text"
-                              label={
-                                <div className="inline-flex items-center">
-                                  Docker Image / OS
-                                  <CustomTooltip
-                                    title={
-                                      <>
-                                        Docker image of the container.
-                                        <br />
-                                        <br />
-                                        Best practices: avoid using :latest image tags as Akash Providers heavily cache images.
-                                      </>
-                                    }
+                                }
+                                placeholder="Example: mydockerimage:1.01"
+                                color="secondary"
+                                // error={!!fieldState.error}
+                                disabled={github}
+                                error={fieldState.error?.message}
+                                className="flex-grow"
+                                value={field.value}
+                                onChange={event => field.onChange((event.target.value || "").toLowerCase())}
+                                startIcon={<Image alt="Docker Logo" src="/images/docker.png" layout="fixed" quality={100} width={24} height={18} priority />}
+                                endIcon={
+                                  <Link
+                                    href={`https://hub.docker.com/search?q=${currentService.image?.split(":")[0]}&type=image`}
+                                    className={cn(
+                                      buttonVariants({
+                                        variant: "text",
+                                        size: "icon"
+                                      }),
+                                      "text-muted-foreground"
+                                    )}
+                                    target="_blank"
                                   >
-                                    <InfoCircle className="ml-2 text-xs text-muted-foreground" />
-                                  </CustomTooltip>
-                                </div>
-                              }
-                              placeholder="Example: mydockerimage:1.01"
-                              color="secondary"
-                              // error={!!fieldState.error}
-                              disabled={github}
-                              error={fieldState.error?.message}
-                              className="flex-grow"
-                              value={field.value}
-                              onChange={event => field.onChange((event.target.value || "").toLowerCase())}
-                              startIcon={<Image alt="Docker Logo" src="/images/docker.png" layout="fixed" quality={100} width={24} height={18} priority />}
-                              endIcon={
-                                <Link
-                                  href={`https://hub.docker.com/search?q=${currentService.image?.split(":")[0]}&type=image`}
-                                  className={cn(
-                                    buttonVariants({
-                                      variant: "text",
-                                      size: "icon"
-                                    }),
-                                    "text-muted-foreground"
-                                  )}
-                                  target="_blank"
-                                >
-                                  <OpenInWindow />
-                                </Link>
-                              }
-                              data-testid="image-name-input"
-                            />
-                          )
-                        }
-                      />
-                    </div>
+                                    <OpenInWindow />
+                                  </Link>
+                                }
+                                data-testid="image-name-input"
+                              />
+                            )
+                          }
+                        />
+                      </div>
+                    )}
 
                     <div>
                       <CpuFormControl control={control as any} currentService={currentService} serviceIndex={serviceIndex} />
@@ -351,37 +353,40 @@ export const SimpleServiceFormControl: React.FunctionComponent<Props> = ({
                 </div>
 
                 <div>
-                  <div className="grid gap-4">
-                    {(hasComponent("ssh") || hasComponent("ssh-toggle")) && (
-                      <FormPaper className="whitespace-break-spaces break-all">
-                        {hasComponent("ssh-toggle") && (
-                          <CheckboxWithLabel
-                            checked={hasComponent("ssh")}
-                            onCheckedChange={() => toggleCmp("ssh")}
-                            className="ml-4"
-                            label="Expose SSH"
-                            data-testid="ssh-toggle"
-                          />
+                  {!github && (
+                    <>
+                      <div className="grid gap-4">
+                        {(hasComponent("ssh") || hasComponent("ssh-toggle")) && (
+                          <FormPaper className="whitespace-break-spaces break-all">
+                            {hasComponent("ssh-toggle") && (
+                              <CheckboxWithLabel
+                                checked={hasComponent("ssh")}
+                                onCheckedChange={() => toggleCmp("ssh")}
+                                className="ml-4"
+                                label="Expose SSH"
+                                data-testid="ssh-toggle"
+                              />
+                            )}
+                            {hasComponent("ssh") && <SSHKeyFormControl control={control} serviceIndex={serviceIndex} setValue={setValue} />}
+                          </FormPaper>
                         )}
-                        {hasComponent("ssh") && <SSHKeyFormControl control={control} serviceIndex={serviceIndex} setValue={setValue} />}
-                      </FormPaper>
-                    )}
-                    {!github && (
-                      <div>
-                        <EnvVarList currentService={currentService} setIsEditingEnv={setIsEditingEnv} serviceIndex={serviceIndex} />
-                      </div>
-                    )}
 
-                    {hasComponent("command") && (
-                      <div>
-                        <CommandList currentService={currentService} setIsEditingCommands={setIsEditingCommands} serviceIndex={serviceIndex} />
-                      </div>
-                    )}
-                  </div>
+                        <div>
+                          <EnvVarList currentService={currentService} setIsEditingEnv={setIsEditingEnv} serviceIndex={serviceIndex} />
+                        </div>
 
-                  <div className="mt-4">
-                    <ExposeList currentService={currentService} setIsEditingExpose={setIsEditingExpose} serviceIndex={serviceIndex} />
-                  </div>
+                        {hasComponent("command") && (
+                          <div>
+                            <CommandList currentService={currentService} setIsEditingCommands={setIsEditingCommands} serviceIndex={serviceIndex} />
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="mt-4">
+                        <ExposeList currentService={currentService} setIsEditingExpose={setIsEditingExpose} serviceIndex={serviceIndex} />
+                      </div>
+                    </>
+                  )}
 
                   {hasComponent("service-count") && (
                     <div className="mt-4">
