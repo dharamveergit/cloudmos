@@ -5,7 +5,7 @@ import { Button, CustomNoDivTooltip, FormInput, Switch } from "@akashnetwork/ui/
 import { Bin, Eye, EyeClosed } from "iconoir-react";
 import { nanoid } from "nanoid";
 
-import { EnvironmentVariable, RentGpusFormValues, SdlBuilderFormValues } from "@src/types";
+import { EnvironmentVariableType, RentGpusFormValuesType, SdlBuilderFormValuesType } from "@src/types";
 import { cn } from "@src/utils/styleUtils";
 import { FormPaper } from "../sdl/FormPaper";
 import { hiddenEnv } from "./utils";
@@ -13,8 +13,8 @@ import { hiddenEnv } from "./utils";
 type Props = {
   serviceIndex: number;
   onClose: () => void;
-  envs: EnvironmentVariable[];
-  control: Control<SdlBuilderFormValues | RentGpusFormValues, any>;
+  envs: EnvironmentVariableType[];
+  control: Control<SdlBuilderFormValuesType | RentGpusFormValuesType, any>;
   hasSecretOption?: boolean;
   children?: ReactNode;
 };
