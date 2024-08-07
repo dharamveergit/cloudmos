@@ -6,7 +6,7 @@ import { useAtom } from "jotai";
 import { nanoid } from "nanoid";
 
 import remoteDeployStore from "@src/store/remoteDeployStore";
-import { SdlBuilderFormValues, Service } from "@src/types";
+import { SdlBuilderFormValuesType, ServiceType } from "@src/types";
 import { defaultService } from "@src/utils/sdl/data";
 import { generateSdl } from "@src/utils/sdl/sdlGenerator";
 import { importSimpleSdl } from "@src/utils/sdl/sdlImport";
@@ -33,7 +33,7 @@ const RemoteDeployUpdate = ({
 
   const [token] = useAtom(remoteDeployStore.tokens);
   const [, setIsInit] = useState(false);
-  const { control, watch, setValue } = useForm<SdlBuilderFormValues>({
+  const { control, watch, setValue } = useForm<SdlBuilderFormValuesType>({
     defaultValues: {
       services: [defaultService]
     }
@@ -46,14 +46,14 @@ const RemoteDeployUpdate = ({
 
   useEffect(() => {
     const { unsubscribe } = watch(data => {
-      const sdl = generateSdl(data.services as Service[]);
+      const sdl = generateSdl(data.services as ServiceType[]);
       setEditedManifest(sdl);
     });
 
     try {
       if (sdlString) {
         const services = createAndValidateSdl(sdlString);
-        setValue("services", services as Service[]);
+        setValue("services", services as ServiceType[]);
       }
     } catch (error) {
       setError("Error importing SDL");
@@ -99,7 +99,7 @@ const RemoteDeployUpdate = ({
     <div className="flex flex-col gap-6 rounded border bg-card px-4 py-6 md:px-6">
       {services[0]?.env?.length && <EnvFormModal control={control} serviceIndex={0} envs={services[0]?.env ?? []} onClose={() => {}} />}
       {/* //type === github */}
-      {token.access_token && services[0]?.env?.find(e => e.key === "REPO_URL")?.value.includes(token.type) && (
+      {token.access_token && services[0]?.env?.find(e => e.key === "REPO_URL")?.value?.includes(token.type) && (
         <>
           {" "}
           <div className="flex flex-col gap-5 rounded border bg-card px-6 py-6 text-card-foreground">
@@ -125,7 +125,7 @@ const RemoteDeployUpdate = ({
 
 export default RemoteDeployUpdate;
 
-const SelectCommit = ({ services, control }: { services: Service[]; control: Control<SdlBuilderFormValues> }) => {
+const SelectCommit = ({ services, control }: { services: ServiceType[]; control: Control<SdlBuilderFormValuesType> }) => {
   const { data } = useCommits(
     services?.[0]?.env?.find(e => e.key === "REPO_URL")?.value?.replace("https://github.com/", "") ?? "",
     services?.[0]?.env?.find(e => e.key === "BRANCH_NAME")?.value ?? ""
@@ -165,7 +165,7 @@ const SelectCommit = ({ services, control }: { services: Service[]; control: Con
   );
 };
 
-const Field = ({ data, control }: { data: any; control: Control<SdlBuilderFormValues> }) => {
+const Field = ({ data, control }: { data: any; control: Control<SdlBuilderFormValuesType> }) => {
   const [manual, setManual] = useState<boolean>(false);
   const { fields: services } = useFieldArray({
     control,
