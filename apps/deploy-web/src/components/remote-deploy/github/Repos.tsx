@@ -5,7 +5,7 @@ import { useAtom } from "jotai";
 import { nanoid } from "nanoid";
 
 import remoteDeployStore from "@src/store/remoteDeployStore";
-import { Service } from "@src/types";
+import { ServiceType } from "@src/types";
 import { handleLogin } from "../api/api";
 const Repos = ({
   repos,
@@ -17,7 +17,7 @@ const Repos = ({
 }: {
   repos: any;
   setValue: any;
-  services: Service[];
+  services: ServiceType[];
   isLoading: boolean;
   setDeploymentName: Dispatch<string>;
   deploymentName: string;

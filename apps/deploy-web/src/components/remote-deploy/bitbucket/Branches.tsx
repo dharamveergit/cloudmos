@@ -2,11 +2,11 @@ import { Control, useFieldArray } from "react-hook-form";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue, Spinner } from "@akashnetwork/ui/components";
 import { nanoid } from "nanoid";
 
-import { SdlBuilderFormValues, Service } from "@src/types";
+import { SdlBuilderFormValuesType, ServiceType } from "@src/types";
 import { useBitBranches } from "../api/bitbucket-api";
 import { removeInitialUrl } from "../utils";
 
-const Branches = ({ services, control }: { services: Service[]; control: Control<SdlBuilderFormValues> }) => {
+const Branches = ({ services, control }: { services: ServiceType[]; control: Control<SdlBuilderFormValuesType> }) => {
   const selected = removeInitialUrl(services?.[0]?.env?.find(e => e.key === "REPO_URL")?.value);
 
   const { data: branches, isLoading: branchesLoading } = useBitBranches(selected);

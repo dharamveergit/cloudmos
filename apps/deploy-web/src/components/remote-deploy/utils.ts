@@ -1,7 +1,7 @@
 import { Control } from "react-hook-form";
 import { nanoid } from "nanoid";
 
-import { SdlBuilderFormValues, Service } from "@src/types";
+import { SdlBuilderFormValuesType, ServiceType } from "@src/types";
 
 export type OAuth = "github" | "gitlab" | "bitbucket";
 export const PROXY_API_URL_AUTH = "https://proxy-console-github.vercel.app";
@@ -21,8 +21,8 @@ export const hiddenEnv = [
   "DISABLE_PULL"
 ];
 export const REDIRECT_URL = "http://localhost:3000/new-deployment?step=edit-deployment&type=github";
-export type ServiceControl = Control<SdlBuilderFormValues>;
-export function appendEnv(key: string, value: string, isSecret: boolean, setValue: any, services: Service[]) {
+export type ServiceControl = Control<SdlBuilderFormValuesType>;
+export function appendEnv(key: string, value: string, isSecret: boolean, setValue: any, services: ServiceType[]) {
   const previousEnv = services[0]?.env || [];
   if (previousEnv.find(e => e.key === key)) {
     previousEnv.map(e => {

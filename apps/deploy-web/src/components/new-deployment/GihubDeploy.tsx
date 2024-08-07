@@ -4,7 +4,7 @@ import { Bitbucket, CoinsSwap, Github as GitIcon, GitlabFull } from "iconoir-rea
 import { useAtom } from "jotai";
 
 import remoteDeployStore from "@src/store/remoteDeployStore";
-import { Service } from "@src/types";
+import { ServiceType } from "@src/types";
 import Advanced from "../remote-deploy/Advanced";
 import { handleLogin, useFetchAccessToken, useUserProfile } from "../remote-deploy/api/api";
 import { handleLoginBit, useBitFetchAccessToken, useBitUserProfile } from "../remote-deploy/api/bitbucket-api";
@@ -24,7 +24,7 @@ const GithubDeploy = ({
   setDeploymentName
 }: {
   setValue: any;
-  services: Service[];
+  services: ServiceType[];
   control: any;
   setDeploymentName: Dispatch<string>;
   deploymentName: string;
@@ -155,13 +155,13 @@ const GithubDeploy = ({
                 <CustomInput
                   label="Repository URL"
                   description="The link of the public repo to be deployed"
-                  placeholder="eg. anything"
+                  placeholder="eg. https://github.com/username/repo.git"
                   onChange={e => appendEnv("REPO_URL", e.target.value, false, setValue, services)}
                 />
                 <CustomInput
                   label="Branch Name"
                   description="The git branch branch which is to be deployed"
-                  placeholder="eg. anything"
+                  placeholder="eg. main"
                   onChange={e => appendEnv("BRANCH_NAME", e.target.value, false, setValue, services)}
                 />
               </TabsContent>

@@ -1,6 +1,6 @@
 import React, { Dispatch, useState } from "react";
 
-import { Service } from "@src/types";
+import { ServiceType } from "@src/types";
 import { useBitReposByWorkspace } from "../api/bitbucket-api";
 import { ServiceControl } from "../utils";
 import Branches from "./Branches";
@@ -20,7 +20,7 @@ const Bit = ({
   deploymentName: string;
   loading: boolean;
   setValue: any;
-  services: Service[];
+  services: ServiceType[];
   control: ServiceControl;
   profile: any;
 }) => {

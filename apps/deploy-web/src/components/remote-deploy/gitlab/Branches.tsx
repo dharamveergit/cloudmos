@@ -2,10 +2,10 @@ import { Control, useFieldArray } from "react-hook-form";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue, Spinner } from "@akashnetwork/ui/components";
 import { nanoid } from "nanoid";
 
-import { SdlBuilderFormValues, Service } from "@src/types";
+import { SdlBuilderFormValuesType, ServiceType } from "@src/types";
 import { useGitLabBranches, useGitLabReposByGroup } from "../api/gitlab-api";
 
-const Branches = ({ repos, services, control }: { repos?: any; services: Service[]; control: Control<SdlBuilderFormValues> }) => {
+const Branches = ({ repos, services, control }: { repos?: any; services: ServiceType[]; control: Control<SdlBuilderFormValuesType> }) => {
   const selected =
     repos?.length > 0
       ? repos?.find(e => e.web_url === services?.[0]?.env?.find(e => e.key === "REPO_URL")?.value)?.id

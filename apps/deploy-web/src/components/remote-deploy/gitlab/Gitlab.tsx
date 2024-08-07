@@ -1,6 +1,6 @@
 import React, { Dispatch, useState } from "react";
 
-import { Service } from "@src/types";
+import { ServiceType } from "@src/types";
 import { useGitLabReposByGroup } from "../api/gitlab-api";
 import { ServiceControl } from "../utils";
 import Branches from "./Branches";
@@ -19,7 +19,7 @@ const GitLab = ({
   deploymentName: string;
   loading: boolean;
   setValue: any;
-  services: Service[];
+  services: ServiceType[];
   control: ServiceControl;
 }) => {
   const [group, setGroup] = useState<string>("");

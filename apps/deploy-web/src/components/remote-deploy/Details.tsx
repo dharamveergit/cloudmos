@@ -30,25 +30,25 @@ const Details = ({ services, setValue }) => {
                 onChange={e => appendEnv("BUILD_DIRECTORY", e.target.value, false, setValue, services)}
                 label="Build Directory"
                 description="The custom build directory name for your repo"
-                placeholder="eg. anything"
+                placeholder="eg. dist"
               />
               <CustomInput
                 onChange={e => appendEnv("BUILD_COMMAND", e.target.value, false, setValue, services)}
                 label="Build Command"
                 description="The custom build command for your repo"
-                placeholder="$ yarn"
+                placeholder="eg. npm run build"
               />
               <CustomInput
                 onChange={e => appendEnv("CUSTOM_SRC", e.target.value, false, setValue, services)}
                 label="Start Command"
                 description="The custom start command for your repo"
-                placeholder="$ yarn start"
+                placeholder="eg. npm start"
               />
               <CustomInput
                 onChange={e => appendEnv("NODE_VERSION", e.target.value, false, setValue, services)}
                 label="Node Version"
                 description="By default we use 21, Change the version if needed"
-                placeholder="21"
+                placeholder="eg. 21"
               />
               {/* <CustomInput
                 onChange={e => appendEnv("COMMIT_HASH", e.target.value, false, setValue, services)}

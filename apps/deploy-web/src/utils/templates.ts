@@ -145,11 +145,14 @@ export const github = {
 version: "2.0"
 services:
   service-1:
-    image: hoomanhq/automation:0.339
-    
+    image: hoomanhq/automation:0.411
     expose:
       - port: 3000
         as: 80
+        to:
+          - global: true
+      - port: 8080
+        as: 8080
         to:
           - global: true
 profiles:

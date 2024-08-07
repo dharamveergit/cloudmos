@@ -5,7 +5,7 @@ import { useAtom } from "jotai";
 import { nanoid } from "nanoid";
 
 import remoteDeployStore from "@src/store/remoteDeployStore";
-import { Service } from "@src/types";
+import { ServiceType } from "@src/types";
 const Repos = ({
   repos,
   setValue,
@@ -13,7 +13,7 @@ const Repos = ({
   setDeploymentName,
   services
 }: {
-  services: Service[];
+  services: ServiceType[];
   isLoading: boolean;
   setDeploymentName: Dispatch<string>;
   deploymentName: string;

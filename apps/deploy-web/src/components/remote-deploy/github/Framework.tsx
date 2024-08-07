@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectSeparator, SelectTrigger, SelectValue, Spinner } from "@akashnetwork/ui/components";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue, Spinner } from "@akashnetwork/ui/components";
 import { Globe } from "iconoir-react";
 
-import { Service } from "@src/types";
+import { ServiceType } from "@src/types";
 import { usePackageJson } from "../api/api";
 import { removeInitialUrl } from "../utils";
 const frameworks = [
@@ -42,7 +42,7 @@ const frameworks = [
     value: "other"
   }
 ];
-const Framework = ({ services }: { services: Service[] }) => {
+const Framework = ({ services }: { services: ServiceType[] }) => {
   const [data, setData] = useState<any>(null);
   const selected = removeInitialUrl(services?.[0]?.env?.find(e => e.key === "REPO_URL")?.value);
   const { isLoading } = usePackageJson(selected ?? "", (data: any) => {
