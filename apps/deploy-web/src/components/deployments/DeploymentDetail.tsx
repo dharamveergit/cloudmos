@@ -3,6 +3,7 @@
 import { createRef, useEffect, useState } from "react";
 import { Alert, Button, buttonVariants, Spinner, Tabs, TabsList, TabsTrigger } from "@akashnetwork/ui/components";
 import { ArrowLeft } from "iconoir-react";
+import yaml from "js-yaml";
 import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { NextSeo } from "next-seo";
@@ -16,8 +17,10 @@ import { useDeploymentLeaseList } from "@src/queries/useLeaseQuery";
 import { useProviderList } from "@src/queries/useProvidersQuery";
 import { AnalyticsEvents } from "@src/utils/analytics";
 import { RouteStepKeys } from "@src/utils/constants";
+import { deploymentData } from "@src/utils/deploymentData";
 import { getDeploymentLocalData } from "@src/utils/deploymentLocalDataUtils";
 import { cn } from "@src/utils/styleUtils";
+import { github } from "@src/utils/templates";
 import { UrlService } from "@src/utils/urlUtils";
 import Layout from "../layout/Layout";
 import { Title } from "../shared/Title";
@@ -134,6 +137,37 @@ export function DeploymentDetail() {
       label: `Navigate tab ${value} in deployment detail`
     });
   };
+  const [remoteDeploy, setRemoteDeploy] = useState<boolean>(false);
+  const [editedManifest, setEditedManifest] = useState<string | null>(null);
+  const [deploymentVersion, setDeploymentVersion] = useState<string | null>(null);
+  const [showOutsideDeploymentMessage, setShowOutsideDeploymentMessage] = useState(false);
+  useEffect(() => {
+    const init = async () => {
+      const localDeploymentData = getDeploymentLocalData(deployment?.dseq || "");
+      console.log("localDeploymentData", !!localDeploymentData && !!localDeploymentData?.manifest);
+
+      if (localDeploymentData && localDeploymentData.manifest) {
+        setShowOutsideDeploymentMessage(false);
+        setEditedManifest(localDeploymentData?.manifest);
+        const yamlVersion = yaml.load(localDeploymentData?.manifest);
+        const version = await deploymentData.getManifestVersion(yamlVersion);
+
+        setDeploymentVersion(version);
+      } else {
+        console.log("klsj");
+
+        setShowOutsideDeploymentMessage(true);
+      }
+    };
+
+    init();
+  }, [deployment]);
+
+  useEffect(() => {
+    if (editedManifest && github.content.includes(editedManifest?.split("service-1:")?.[1]?.split("expose:")?.[0]?.split("image: ")?.[1])) {
+      setRemoteDeploy(true);
+    }
+  }, [editedManifest]);
 
   return (
     <Layout isLoading={isLoadingLeases || isLoadingDeployment || isLoadingProviders} isUsingSettings isUsingWallet containerClassName="pb-0">
@@ -177,6 +211,13 @@ export function DeploymentDetail() {
 
             {activeTab === "EDIT" && deployment && leases && (
               <ManifestUpdate
+                editedManifest={editedManifest as string}
+                deploymentVersion={deploymentVersion}
+                setEditedManifest={setEditedManifest}
+                setDeploymentVersion={setDeploymentVersion}
+                setShowOutsideDeploymentMessage={setShowOutsideDeploymentMessage}
+                showOutsideDeploymentMessage={showOutsideDeploymentMessage}
+                remoteDeploy={remoteDeploy}
                 deployment={deployment}
                 leases={leases}
                 closeManifestEditor={() => {
@@ -185,8 +226,8 @@ export function DeploymentDetail() {
                 }}
               />
             )}
-            {activeTab === "LOGS" && <DeploymentLogs leases={leases} selectedLogsMode="logs" />}
-            {activeTab === "EVENTS" && <DeploymentLogs leases={leases} selectedLogsMode="events" />}
+            {activeTab === "LOGS" && <DeploymentLogs leases={leases} selectedLogsMode="logs" remoteDeploy={remoteDeploy} />}
+            {activeTab === "EVENTS" && <DeploymentLogs leases={leases} selectedLogsMode="events" remoteDeploy={remoteDeploy} />}
             {activeTab === "SHELL" && <DeploymentLeaseShell leases={leases} />}
             {activeTab === "LEASES" && (
               <div className="p-4">
@@ -211,6 +252,7 @@ export function DeploymentDetail() {
                       dseq={dseq}
                       providers={providers || []}
                       loadDeploymentDetail={loadDeploymentDetail}
+                      remoteDeploy={remoteDeploy}
                     />
                   ))}
 

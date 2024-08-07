@@ -7,6 +7,7 @@ import { useTheme as useMuiTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { Download, MoreHoriz } from "iconoir-react";
 import { editor } from "monaco-editor";
+import Link from "next/link";
 import { event } from "nextjs-google-analytics";
 
 import { CustomDropdownLinkItem } from "@src/components/shared/CustomDropdownLinkItem";
@@ -30,14 +31,16 @@ export type LOGS_MODE = "logs" | "events";
 type Props = {
   leases: Array<LeaseDto> | null | undefined;
   selectedLogsMode: LOGS_MODE;
+  remoteDeploy?: boolean;
 };
 
-export const DeploymentLogs: React.FunctionComponent<Props> = ({ leases, selectedLogsMode }) => {
+export const DeploymentLogs: React.FunctionComponent<Props> = ({ leases, selectedLogsMode, remoteDeploy }) => {
   const [isLoadingLogs, setIsLoadingLogs] = useState(true);
   const [canSetConnection, setCanSetConnection] = useState(false);
   const [isConnectionEstablished, setIsConnectionEstablished] = useState(false);
   // TODO Type
   const logs = useRef<any[]>([]);
+
   const [logText, setLogText] = useState("");
   const [isDownloadingLogs, setIsDownloadingLogs] = useState(false);
   const [services, setServices] = useState<string[]>([]);
@@ -57,6 +60,7 @@ export const DeploymentLogs: React.FunctionComponent<Props> = ({ leases, selecte
   } = useLeaseStatus(providerInfo?.hostUri || "", selectedLease as LeaseDto, {
     enabled: false
   });
+  console.log(leaseStatus);
   const { sendJsonMessage } = useWebSocket(PROVIDER_PROXY_URL_WS, {
     onOpen: () => {},
     onMessage: onLogReceived,
@@ -239,6 +243,9 @@ export const DeploymentLogs: React.FunctionComponent<Props> = ({ leases, selecte
     }
   };
 
+  const remoteLogs = leaseStatus?.forwarded_ports?.["service-1"]?.[0];
+  console.log(remoteLogs);
+
   return (
     <div>
       {isLocalCertMatching ? (
@@ -296,7 +303,9 @@ export const DeploymentLogs: React.FunctionComponent<Props> = ({ leases, selecte
                   </div>
                 ) : (
                   <div className="flex items-center">
-                    <CheckboxWithLabel label="Stick to bottom" checked={stickToBottom} onCheckedChange={checked => setStickToBottom(checked as boolean)} />
+                    {!remoteDeploy && (
+                      <CheckboxWithLabel label="Stick to bottom" checked={stickToBottom} onCheckedChange={checked => setStickToBottom(checked as boolean)} />
+                    )}
                     {localCert && (
                       <div className="ml-4">
                         <Button
@@ -312,7 +321,13 @@ export const DeploymentLogs: React.FunctionComponent<Props> = ({ leases, selecte
                     )}
                   </div>
                 )}
-
+                {remoteDeploy && (
+                  <Link href={`http://${remoteLogs?.host}:${remoteLogs?.externalPort}`} target="_blank">
+                    <Button variant="default" size="sm" color="secondary" disabled={!isConnectionEstablished}>
+                      View Logs
+                    </Button>
+                  </Link>
+                )}
                 {isLoadingStatus && (
                   <div>
                     <Spinner size="small" />
@@ -321,16 +336,19 @@ export const DeploymentLogs: React.FunctionComponent<Props> = ({ leases, selecte
               </div>
 
               <LinearLoadingSkeleton isLoading={isLoadingLogs} />
-
-              <ViewPanel stickToBottom style={{ overflow: "hidden" }}>
-                <MemoMonaco
-                  value={logText}
-                  onMount={handleEditorDidMount}
-                  options={{
-                    readOnly: true
-                  }}
-                />
-              </ViewPanel>
+              {remoteDeploy && remoteLogs ? (
+                <iframe src={`http://${remoteLogs?.host}:${remoteLogs?.externalPort}`} width="100%" height="400px"></iframe>
+              ) : (
+                <ViewPanel stickToBottom style={{ overflow: "hidden" }}>
+                  <MemoMonaco
+                    value={logText}
+                    onMount={handleEditorDidMount}
+                    options={{
+                      readOnly: true
+                    }}
+                  />
+                </ViewPanel>
+              )}
             </>
           )}
         </>
