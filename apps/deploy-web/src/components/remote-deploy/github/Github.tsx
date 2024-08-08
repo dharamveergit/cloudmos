@@ -37,7 +37,7 @@ const Github = ({
         profile={profile}
       />
       <Branches services={services} control={control} />
-      <Framework services={services} />
+      <Framework services={services} setValue={setValue} />
     </>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue, Spinner } from "@akashnetwork/ui/components";
 import { Globe } from "iconoir-react";
 
@@ -42,12 +42,20 @@ const frameworks = [
     value: "other"
   }
 ];
-const Framework = ({ services }: { services: ServiceType[] }) => {
+const Framework = ({ services, setValue }: { services: ServiceType[]; setValue: any }) => {
   const [data, setData] = useState<any>(null);
   const selected = removeInitialUrl(services?.[0]?.env?.find(e => e.key === "REPO_URL")?.value);
   const { isLoading } = usePackageJson(selected ?? "", (data: any) => {
     setData(data);
+    if (data?.dependencies) {
+      const cpus = (Object.keys(data?.dependencies ?? {}).length / 10 / 2).toFixed(1);
+      console.log("c", cpus);
+
+      setValue("services.0.profile.cpu", +cpus > 0.5 ? cpus : 0.5);
+    }
   });
+
+  console.log(data);
 
   return (
     <div className="col-span-2 flex flex-col gap-5 rounded border bg-card px-6 py-6 text-card-foreground">

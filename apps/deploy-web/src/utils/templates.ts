@@ -162,9 +162,9 @@ profiles:
         cpu:
           units: 2
         memory:
-          size: 6GB
+          size: 12GB
         storage:
-          - size: 10Gi
+          - size: 8Gi
   placement:
     dcloud:
       pricing:
