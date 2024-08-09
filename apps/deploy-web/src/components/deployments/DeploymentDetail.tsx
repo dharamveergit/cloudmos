@@ -227,7 +227,7 @@ export function DeploymentDetail() {
               />
             )}
             {activeTab === "LOGS" && <DeploymentLogs leases={leases} selectedLogsMode="logs" remoteDeploy={remoteDeploy} />}
-            {activeTab === "EVENTS" && <DeploymentLogs leases={leases} selectedLogsMode="events" remoteDeploy={remoteDeploy} />}
+            {activeTab === "EVENTS" && <DeploymentLogs leases={leases} selectedLogsMode="events" />}
             {activeTab === "SHELL" && <DeploymentLeaseShell leases={leases} />}
             {activeTab === "LEASES" && (
               <div className="p-4">
